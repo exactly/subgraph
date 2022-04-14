@@ -2,3 +2,50 @@ specVersion: 0.0.2
 schema:
   file: schema.graphql
 dataSources:
+{{# FixedLender }}
+  - kind: ethereum/contract
+    name: {{ name }}
+    network: {{ network }}
+    source:
+      address: '{{ address }}'
+      startBlock: {{ startBlock }}
+      abi: {{ name }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Deposit
+        - Withdraw
+        - DepositAtMaturity
+        - WithdrawAtMaturity
+        - BorrowAtMaturity
+        - RepayAtMaturity
+        - LiquidateBorrow
+        - AssetSeized
+      abis:
+        - name: {{ name }}
+          file: node_modules/@exactly-finance/protocol/deployments/{{ network }}/{{ name }}.json
+      eventHandlers:
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+        - event: DepositAtMaturity(indexed uint256,indexed address,indexed address,uint256,uint256)
+          handler: handleDepositAtMaturity
+        - event: WithdrawAtMaturity(indexed uint256,address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdrawAtMaturity
+        - event: BorrowAtMaturity(indexed uint256,address,indexed address,indexed address,uint256,uint256)
+          handler: handleBorrowAtMaturity
+        - event: RepayAtMaturity(indexed uint256,indexed address,indexed address,uint256,uint256)
+          handler: handleRepayAtMaturity
+
+        - event: LiquidateBorrow(indexed uint256,indexed address,indexed address,uint256,address,uint256)
+          handler: handleLiquidateBorrow
+        - event: AssetSeized(address,address,uint256)
+          handler: handleAssetSeized
+      file: src/FixedLender.ts
+{{/ FixedLender }}

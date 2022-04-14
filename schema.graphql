@@ -1,1 +1,87 @@
+type Deposit @entity {
+  id: ID!
+  market: Bytes!
+  caller: Bytes!
+  owner: Bytes!
+  assets: BigInt!
+  shares: BigInt!
+}
 
+type Withdraw @entity {
+  id: ID!
+  market: Bytes!
+  caller: Bytes!
+  receiver: Bytes!
+  owner: Bytes!
+  assets: BigInt!
+  shares: BigInt!
+}
+
+type Transfer @entity {
+  id: ID!
+  market: Bytes!
+  from: Bytes!
+  to: Bytes!
+  shares: BigInt!
+}
+
+type DepositAtMaturity @entity {
+  id: ID!
+  market: Bytes!
+  maturity: BigInt!
+  caller: Bytes!
+  owner: Bytes!
+  assets: BigInt!
+  fee: BigInt!
+}
+
+type WithdrawAtMaturity @entity {
+  id: ID!
+  market: Bytes!
+  maturity: BigInt!
+  caller: Bytes!
+  receiver: Bytes!
+  owner: Bytes!
+  assets: BigInt!
+  assetsDiscounted: BigInt!
+}
+
+type BorrowAtMaturity @entity {
+  id: ID!
+  market: Bytes!
+  maturity: BigInt!
+  caller: Bytes!
+  receiver: Bytes!
+  borrower: Bytes!
+  assets: BigInt!
+  fee: BigInt!
+}
+
+type RepayAtMaturity @entity {
+  id: ID!
+  market: Bytes!
+  maturity: BigInt!
+  caller: Bytes!
+  borrower: Bytes!
+  assets: BigInt!
+  debtCovered: BigInt!
+}
+
+type LiquidateBorrow @entity {
+  id: ID!
+  market: Bytes!
+  maturity: BigInt!
+  receiver: Bytes!
+  borrower: Bytes!
+  assets: BigInt!
+  collateralMarket: Bytes!
+  seizedAssets: BigInt!
+}
+
+type AssetSeized @entity {
+  id: ID!
+  market: Bytes!
+  liquidator: Bytes!
+  borrower: Bytes!
+  assets: BigInt!
+}
