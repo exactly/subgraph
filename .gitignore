@@ -1,0 +1,10 @@
+.vscode/
+node_modules/
+/build/
+/generated/
+.DS_Store
+.env
+Thumbs.db
+subgraph.yaml
+.*-version*
+*.log
