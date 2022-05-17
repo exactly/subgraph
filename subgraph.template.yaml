@@ -43,9 +43,9 @@ dataSources:
         - event: RepayAtMaturity(indexed uint256,indexed address,indexed address,uint256,uint256)
           handler: handleRepayAtMaturity
 
-        - event: LiquidateBorrow(indexed uint256,indexed address,indexed address,uint256,address,uint256)
+        - event: LiquidateBorrow(indexed address,indexed address,uint256,indexed address,uint256)
           handler: handleLiquidateBorrow
-        - event: AssetSeized(address,address,uint256)
+        - event: AssetSeized(indexed address,indexed address,uint256)
           handler: handleAssetSeized
       file: src/FixedLender.ts
 {{/ FixedLender }}
