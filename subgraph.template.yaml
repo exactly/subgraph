@@ -47,5 +47,8 @@ dataSources:
           handler: handleLiquidateBorrow
         - event: AssetSeized(indexed address,indexed address,uint256)
           handler: handleAssetSeized
+
+        - event: SmartPoolEarningsAccrued(uint256,uint256)
+          handler: handleSmartPoolEarningsAccrued
       file: src/FixedLender.ts
 {{/ FixedLender }}

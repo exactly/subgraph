@@ -70,7 +70,6 @@ type RepayAtMaturity @entity {
 type LiquidateBorrow @entity {
   id: ID!
   market: Bytes!
-  maturity: BigInt!
   receiver: Bytes!
   borrower: Bytes!
   assets: BigInt!
@@ -84,4 +83,11 @@ type AssetSeized @entity {
   liquidator: Bytes!
   borrower: Bytes!
   assets: BigInt!
+}
+
+type SmartPoolEarningsAccrued @entity {
+  id: ID!
+  timestamp: BigInt!
+  previousAssets: BigInt!
+  earnings: BigInt!
 }

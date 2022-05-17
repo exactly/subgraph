@@ -10,11 +10,14 @@ import {
 
   LiquidateBorrow as LiquidateBorrowEvent,
   AssetSeized as AssetSeizedEvent,
+
+  SmartPoolEarningsAccrued as SmartPoolEarningsAccruedEvent,
 } from '../generated/FixedLenderWETH/FixedLenderWETH';
 import {
   Deposit, Withdraw, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
   LiquidateBorrow, AssetSeized,
+  SmartPoolEarningsAccrued,
 } from '../generated/schema';
 import toId from './utils/toId';
 
@@ -90,14 +93,13 @@ export function handleRepayAtMaturity(event: RepayAtMaturityEvent): void {
   entity.caller = event.params.caller;
   entity.borrower = event.params.borrower;
   entity.assets = event.params.assets;
-  entity.debtCovered = event.params.debtCovered;
+  entity.debtCovered = event.params.positionAssets;
   entity.save();
 }
 
 export function handleLiquidateBorrow(event: LiquidateBorrowEvent): void {
   let entity = new LiquidateBorrow(toId(event));
   entity.market = event.address;
-  entity.maturity = event.params.maturity;
   entity.receiver = event.params.receiver;
   entity.borrower = event.params.borrower;
   entity.assets = event.params.assets;
@@ -112,5 +114,13 @@ export function handleAssetSeized(event: AssetSeizedEvent): void {
   entity.liquidator = event.params.liquidator;
   entity.borrower = event.params.borrower;
   entity.assets = event.params.assets;
+  entity.save();
+}
+
+export function handleSmartPoolEarningsAccrued(event: SmartPoolEarningsAccruedEvent): void {
+  let entity = new SmartPoolEarningsAccrued(toId(event));
+  entity.timestamp = event.block.timestamp;
+  entity.previousAssets = event.params.previousAssets;
+  entity.earnings = event.params.earnings;
   entity.save();
 }
