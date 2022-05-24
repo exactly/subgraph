@@ -9,6 +9,7 @@
     "deploy": "graph deploy --product hosted-service",
     "prepare:mainnet": "cross-env NETWORK=mainnet mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "prepare:kovan": "cross-env NETWORK=kovan mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
+    "prepare:rinkeby": "cross-env NETWORK=rinkeby mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "postinstall": "run-s prepare:kovan codegen || cd ."
   },
   "engines": {
