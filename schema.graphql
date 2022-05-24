@@ -1,5 +1,6 @@
 type Deposit @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   caller: Bytes!
   owner: Bytes!
@@ -9,6 +10,7 @@ type Deposit @entity {
 
 type Withdraw @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   caller: Bytes!
   receiver: Bytes!
@@ -19,6 +21,7 @@ type Withdraw @entity {
 
 type Transfer @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   from: Bytes!
   to: Bytes!
@@ -27,6 +30,7 @@ type Transfer @entity {
 
 type DepositAtMaturity @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   maturity: BigInt!
   caller: Bytes!
@@ -37,6 +41,7 @@ type DepositAtMaturity @entity {
 
 type WithdrawAtMaturity @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   maturity: BigInt!
   caller: Bytes!
@@ -48,6 +53,7 @@ type WithdrawAtMaturity @entity {
 
 type BorrowAtMaturity @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   maturity: BigInt!
   caller: Bytes!
@@ -59,6 +65,7 @@ type BorrowAtMaturity @entity {
 
 type RepayAtMaturity @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   maturity: BigInt!
   caller: Bytes!
@@ -69,6 +76,7 @@ type RepayAtMaturity @entity {
 
 type LiquidateBorrow @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   receiver: Bytes!
   borrower: Bytes!
@@ -79,6 +87,7 @@ type LiquidateBorrow @entity {
 
 type AssetSeized @entity {
   id: ID!
+  timestamp: BigInt!
   market: Bytes!
   liquidator: Bytes!
   borrower: Bytes!
