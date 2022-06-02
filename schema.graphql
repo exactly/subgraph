@@ -97,6 +97,7 @@ type AssetSeized @entity {
 type SmartPoolEarningsAccrued @entity {
   id: ID!
   timestamp: BigInt!
+  market: Bytes!
   previousAssets: BigInt!
   earnings: BigInt!
 }

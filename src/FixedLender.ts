@@ -129,6 +129,7 @@ export function handleAssetSeized(event: AssetSeizedEvent): void {
 export function handleSmartPoolEarningsAccrued(event: SmartPoolEarningsAccruedEvent): void {
   let entity = new SmartPoolEarningsAccrued(toId(event));
   entity.timestamp = event.block.timestamp;
+  entity.market = event.address;
   entity.previousAssets = event.params.previousAssets;
   entity.earnings = event.params.earnings;
   entity.save();
