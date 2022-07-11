@@ -1,7 +1,7 @@
 type Deposit @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   caller: Bytes!
   owner: Bytes!
   assets: BigInt!
@@ -10,8 +10,8 @@ type Deposit @entity {
 
 type Withdraw @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   caller: Bytes!
   receiver: Bytes!
   owner: Bytes!
@@ -21,8 +21,8 @@ type Withdraw @entity {
 
 type Transfer @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   from: Bytes!
   to: Bytes!
   shares: BigInt!
@@ -30,8 +30,8 @@ type Transfer @entity {
 
 type DepositAtMaturity @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   maturity: BigInt!
   caller: Bytes!
   owner: Bytes!
@@ -41,8 +41,8 @@ type DepositAtMaturity @entity {
 
 type WithdrawAtMaturity @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   maturity: BigInt!
   caller: Bytes!
   receiver: Bytes!
@@ -53,8 +53,8 @@ type WithdrawAtMaturity @entity {
 
 type BorrowAtMaturity @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   maturity: BigInt!
   caller: Bytes!
   receiver: Bytes!
@@ -65,8 +65,8 @@ type BorrowAtMaturity @entity {
 
 type RepayAtMaturity @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   maturity: BigInt!
   caller: Bytes!
   borrower: Bytes!
@@ -76,8 +76,8 @@ type RepayAtMaturity @entity {
 
 type LiquidateBorrow @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   receiver: Bytes!
   borrower: Bytes!
   assets: BigInt!
@@ -87,8 +87,8 @@ type LiquidateBorrow @entity {
 
 type AssetSeized @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   liquidator: Bytes!
   borrower: Bytes!
   assets: BigInt!
@@ -96,8 +96,19 @@ type AssetSeized @entity {
 
 type SmartPoolEarningsAccrued @entity {
   id: ID!
-  timestamp: BigInt!
   market: Bytes!
+  timestamp: BigInt!
   previousAssets: BigInt!
   earnings: BigInt!
+}
+
+type MarketUpdated @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: BigInt!
+  smartPoolShares: BigInt!
+  smartPoolAssets: BigInt!
+  smartPoolEarningsAccumulator: BigInt!
+  maturity: BigInt!
+  maturityUnassignedEarnings: BigInt!
 }

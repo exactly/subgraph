@@ -50,5 +50,7 @@ dataSources:
 
         - event: SmartPoolEarningsAccrued(uint256,uint256)
           handler: handleSmartPoolEarningsAccrued
+        - event: MarketUpdated(uint256,uint256,uint256,uint256,indexed uint256,uint256)
+          handler: handleMarketUpdated
       file: src/FixedLender.ts
 {{/ FixedLender }}
