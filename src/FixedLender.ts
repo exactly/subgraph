@@ -111,7 +111,7 @@ export function handleLiquidateBorrow(event: LiquidateBorrowEvent): void {
   entity.receiver = event.params.receiver;
   entity.borrower = event.params.borrower;
   entity.assets = event.params.assets;
-  entity.collateralMarket = event.params.collateralFixedLender;
+  entity.collateralMarket = event.params.collateralMarket;
   entity.seizedAssets = event.params.seizedAssets;
   entity.save();
 }
