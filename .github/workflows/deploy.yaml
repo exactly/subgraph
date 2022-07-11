@@ -17,10 +17,6 @@ jobs:
       - run: npm run auth ${{ secrets.GRAPH_ACCESS_TOKEN }}
               
       - run: |
-          npm run prepare:kovan
-          npm run deploy exactly-finance/exactly-kovan
-              
-      - run: |
           npm run prepare:rinkeby
           npm run deploy exactly-finance/exactly-rinkeby
       
