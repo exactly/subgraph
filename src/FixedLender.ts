@@ -11,6 +11,7 @@ import {
   LiquidateBorrow as LiquidateBorrowEvent,
   AssetSeized as AssetSeizedEvent,
 
+  AccumulatedEarningsSmoothFactorSet as AccumulatedEarningsSmoothFactorSetEvent,
   SmartPoolEarningsAccrued as SmartPoolEarningsAccruedEvent,
   MarketUpdated as MarketUpdatedEvent,
 } from '../generated/FixedLenderWETH/FixedLenderWETH';
@@ -18,6 +19,7 @@ import {
   Deposit, Withdraw, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
   LiquidateBorrow, AssetSeized,
+  AccumulatedEarningsSmoothFactorSet,
   SmartPoolEarningsAccrued,
   MarketUpdated,
 } from '../generated/schema';
@@ -125,6 +127,16 @@ export function handleAssetSeized(event: AssetSeizedEvent): void {
   entity.liquidator = event.params.liquidator;
   entity.borrower = event.params.borrower;
   entity.assets = event.params.assets;
+  entity.save();
+}
+
+export function handleAccumulatedEarningsSmoothFactorSet(
+  event: AccumulatedEarningsSmoothFactorSetEvent,
+): void {
+  let entity = new AccumulatedEarningsSmoothFactorSet(toId(event));
+  entity.market = event.address;
+  entity.timestamp = event.block.timestamp.toI32();
+  entity.accumulatedEarningsSmoothFactor = event.params.newAccumulatedEarningsSmoothFactor;
   entity.save();
 }
 

@@ -48,6 +48,8 @@ dataSources:
         - event: AssetSeized(indexed address,indexed address,uint256)
           handler: handleAssetSeized
 
+        - event: AccumulatedEarningsSmoothFactorSet(uint128)
+          handler: handleAccumulatedEarningsSmoothFactorSet
         - event: SmartPoolEarningsAccrued(uint256,uint256)
           handler: handleSmartPoolEarningsAccrued
         - event: MarketUpdated(uint256,uint256,uint256,uint256,indexed uint256,uint256)

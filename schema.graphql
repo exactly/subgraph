@@ -94,6 +94,13 @@ type AssetSeized @entity {
   assets: BigInt!
 }
 
+type AccumulatedEarningsSmoothFactorSet @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  accumulatedEarningsSmoothFactor: BigInt!
+}
+
 type SmartPoolEarningsAccrued @entity {
   id: ID!
   market: Bytes!
