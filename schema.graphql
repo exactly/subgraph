@@ -1,7 +1,7 @@
 type Deposit @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
+  timestamp: Int!
   caller: Bytes!
   owner: Bytes!
   assets: BigInt!
@@ -11,7 +11,7 @@ type Deposit @entity {
 type Withdraw @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
+  timestamp: Int!
   caller: Bytes!
   receiver: Bytes!
   owner: Bytes!
@@ -22,7 +22,7 @@ type Withdraw @entity {
 type Transfer @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
+  timestamp: Int!
   from: Bytes!
   to: Bytes!
   shares: BigInt!
@@ -31,8 +31,8 @@ type Transfer @entity {
 type DepositAtMaturity @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
-  maturity: BigInt!
+  timestamp: Int!
+  maturity: Int!
   caller: Bytes!
   owner: Bytes!
   assets: BigInt!
@@ -42,8 +42,8 @@ type DepositAtMaturity @entity {
 type WithdrawAtMaturity @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
-  maturity: BigInt!
+  timestamp: Int!
+  maturity: Int!
   caller: Bytes!
   receiver: Bytes!
   owner: Bytes!
@@ -54,8 +54,8 @@ type WithdrawAtMaturity @entity {
 type BorrowAtMaturity @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
-  maturity: BigInt!
+  timestamp: Int!
+  maturity: Int!
   caller: Bytes!
   receiver: Bytes!
   borrower: Bytes!
@@ -66,8 +66,8 @@ type BorrowAtMaturity @entity {
 type RepayAtMaturity @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
-  maturity: BigInt!
+  timestamp: Int!
+  maturity: Int!
   caller: Bytes!
   borrower: Bytes!
   assets: BigInt!
@@ -77,7 +77,7 @@ type RepayAtMaturity @entity {
 type LiquidateBorrow @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
+  timestamp: Int!
   receiver: Bytes!
   borrower: Bytes!
   assets: BigInt!
@@ -88,7 +88,7 @@ type LiquidateBorrow @entity {
 type AssetSeized @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
+  timestamp: Int!
   liquidator: Bytes!
   borrower: Bytes!
   assets: BigInt!
@@ -97,7 +97,7 @@ type AssetSeized @entity {
 type SmartPoolEarningsAccrued @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
+  timestamp: Int!
   previousAssets: BigInt!
   earnings: BigInt!
 }
@@ -105,10 +105,10 @@ type SmartPoolEarningsAccrued @entity {
 type MarketUpdated @entity {
   id: ID!
   market: Bytes!
-  timestamp: BigInt!
+  timestamp: Int!
   smartPoolShares: BigInt!
   smartPoolAssets: BigInt!
   smartPoolEarningsAccumulator: BigInt!
-  maturity: BigInt!
+  maturity: Int!
   maturityUnassignedEarnings: BigInt!
 }
