@@ -18,8 +18,8 @@ jobs:
               
       - run: |
           npm run prepare:rinkeby
-          npm run deploy exactly-finance/exactly-rinkeby
+          npm run deploy exactly-protocol/exactly-rinkeby
       
       - run: |
           npm run prepare:mainnet
-          npm run deploy exactly-finance/exactly
+          npm run deploy exactly-protocol/exactly

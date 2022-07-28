@@ -2,7 +2,7 @@ specVersion: 0.0.2
 schema:
   file: schema.graphql
 dataSources:
-{{# FixedLender }}
+{{# Market }}
   - kind: ethereum/contract
     name: {{ name }}
     network: {{ network }}
@@ -22,10 +22,10 @@ dataSources:
         - BorrowAtMaturity
         - RepayAtMaturity
         - LiquidateBorrow
-        - AssetSeized
+        - Seize
       abis:
         - name: {{ name }}
-          file: node_modules/@exactly-finance/protocol/deployments/{{ network }}/{{ name }}.json
+          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
       eventHandlers:
         - event: Deposit(indexed address,indexed address,uint256,uint256)
           handler: handleDeposit
@@ -45,14 +45,14 @@ dataSources:
 
         - event: LiquidateBorrow(indexed address,indexed address,uint256,uint256,indexed address,uint256)
           handler: handleLiquidateBorrow
-        - event: AssetSeized(indexed address,indexed address,uint256)
-          handler: handleAssetSeized
+        - event: Seize(indexed address,indexed address,uint256)
+          handler: handleSeize
 
-        - event: AccumulatedEarningsSmoothFactorSet(uint128)
-          handler: handleAccumulatedEarningsSmoothFactorSet
-        - event: SmartPoolEarningsAccrued(uint256,uint256)
-          handler: handleSmartPoolEarningsAccrued
-        - event: MarketUpdated(uint256,uint256,uint256,uint256,indexed uint256,uint256)
+        - event: EarningsAccumulatorSmoothFactorSet(uint128)
+          handler: handleEarningsAccumulatorSmoothFactorSet
+        - event: MarketUpdated(uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleMarketUpdated
-      file: src/FixedLender.ts
-{{/ FixedLender }}
+        - event: MarketUpdatedAtMaturity(uint256,uint256,uint256,uint256,indexed uint256,uint256)
+          handler: handleMarketUpdatedAtMaturity
+      file: src/Market.ts
+{{/ Market }}

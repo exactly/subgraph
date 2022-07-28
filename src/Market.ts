@@ -9,19 +9,19 @@ import {
   RepayAtMaturity as RepayAtMaturityEvent,
 
   LiquidateBorrow as LiquidateBorrowEvent,
-  AssetSeized as AssetSeizedEvent,
+  Seize as SeizeEvent,
 
-  AccumulatedEarningsSmoothFactorSet as AccumulatedEarningsSmoothFactorSetEvent,
-  SmartPoolEarningsAccrued as SmartPoolEarningsAccruedEvent,
+  EarningsAccumulatorSmoothFactorSet as EarningsAccumulatorSmoothFactorSetEvent,
   MarketUpdated as MarketUpdatedEvent,
-} from '../generated/FixedLenderWETH/FixedLenderWETH';
+  MarketUpdatedAtMaturity as MarketUpdatedAtMaturityEvent,
+} from '../generated/MarketWETH/MarketWETH';
 import {
   Deposit, Withdraw, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
-  LiquidateBorrow, AssetSeized,
-  AccumulatedEarningsSmoothFactorSet,
-  SmartPoolEarningsAccrued,
+  LiquidateBorrow, Seize,
+  EarningsAccumulatorSmoothFactorSet,
   MarketUpdated,
+  MarketUpdatedAtMaturity,
 } from '../generated/schema';
 import toId from './utils/toId';
 
@@ -120,8 +120,8 @@ export function handleLiquidateBorrow(event: LiquidateBorrowEvent): void {
   entity.save();
 }
 
-export function handleAssetSeized(event: AssetSeizedEvent): void {
-  let entity = new AssetSeized(toId(event));
+export function handleSeize(event: SeizeEvent): void {
+  let entity = new Seize(toId(event));
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toI32();
   entity.liquidator = event.params.liquidator;
@@ -130,22 +130,13 @@ export function handleAssetSeized(event: AssetSeizedEvent): void {
   entity.save();
 }
 
-export function handleAccumulatedEarningsSmoothFactorSet(
-  event: AccumulatedEarningsSmoothFactorSetEvent,
+export function handleEarningsAccumulatorSmoothFactorSet(
+  event: EarningsAccumulatorSmoothFactorSetEvent,
 ): void {
-  let entity = new AccumulatedEarningsSmoothFactorSet(toId(event));
+  let entity = new EarningsAccumulatorSmoothFactorSet(toId(event));
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toI32();
-  entity.accumulatedEarningsSmoothFactor = event.params.newAccumulatedEarningsSmoothFactor;
-  entity.save();
-}
-
-export function handleSmartPoolEarningsAccrued(event: SmartPoolEarningsAccruedEvent): void {
-  let entity = new SmartPoolEarningsAccrued(toId(event));
-  entity.market = event.address;
-  entity.timestamp = event.block.timestamp.toI32();
-  entity.previousAssets = event.params.previousAssets;
-  entity.earnings = event.params.earnings;
+  entity.earningsAccumulatorSmoothFactor = event.params.earningsAccumulatorSmoothFactor;
   entity.save();
 }
 
@@ -153,9 +144,21 @@ export function handleMarketUpdated(event: MarketUpdatedEvent): void {
   let entity = new MarketUpdated(toId(event));
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toI32();
-  entity.smartPoolShares = event.params.smartPoolShares;
-  entity.smartPoolAssets = event.params.smartPoolAssets;
-  entity.smartPoolEarningsAccumulator = event.params.smartPoolEarningsAccumulator;
+  entity.floatingDepositShares = event.params.floatingDepositShares;
+  entity.floatingAssets = event.params.floatingAssets;
+  entity.floatingBorrowShares = event.params.floatingBorrowShares;
+  entity.floatingDebt = event.params.floatingDebt;
+  entity.earningsAccumulator = event.params.earningsAccumulator;
+  entity.save();
+}
+
+export function handleMarketUpdatedAtMaturity(event: MarketUpdatedAtMaturityEvent): void {
+  let entity = new MarketUpdatedAtMaturity(toId(event));
+  entity.market = event.address;
+  entity.timestamp = event.params.timestamp.toI32();
+  entity.floatingDepositShares = event.params.floatingDepositShares;
+  entity.floatingAssets = event.params.floatingAssets;
+  entity.earningsAccumulator = event.params.earningsAccumulator;
   entity.maturity = event.params.maturity.toI32();
   entity.maturityUnassignedEarnings = event.params.maturityUnassignedEarnings;
   entity.save();

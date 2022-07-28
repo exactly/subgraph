@@ -85,7 +85,7 @@ type LiquidateBorrow @entity {
   seizedAssets: BigInt!
 }
 
-type AssetSeized @entity {
+type Seize @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!
@@ -94,28 +94,31 @@ type AssetSeized @entity {
   assets: BigInt!
 }
 
-type AccumulatedEarningsSmoothFactorSet @entity {
+type EarningsAccumulatorSmoothFactorSet @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!
-  accumulatedEarningsSmoothFactor: BigInt!
-}
-
-type SmartPoolEarningsAccrued @entity {
-  id: ID!
-  market: Bytes!
-  timestamp: Int!
-  previousAssets: BigInt!
-  earnings: BigInt!
+  earningsAccumulatorSmoothFactor: BigInt!
 }
 
 type MarketUpdated @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!
-  smartPoolShares: BigInt!
-  smartPoolAssets: BigInt!
-  smartPoolEarningsAccumulator: BigInt!
+  floatingDepositShares: BigInt!
+  floatingAssets: BigInt!
+  floatingBorrowShares: BigInt!
+  floatingDebt: BigInt!
+  earningsAccumulator: BigInt!
+}
+
+type MarketUpdatedAtMaturity @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  floatingDepositShares: BigInt!
+  floatingAssets: BigInt!
+  earningsAccumulator: BigInt!
   maturity: Int!
   maturityUnassignedEarnings: BigInt!
 }
