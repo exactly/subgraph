@@ -19,6 +19,27 @@ type Withdraw @entity {
   shares: BigInt!
 }
 
+type Borrow @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  caller: Bytes!
+  receiver: Bytes!
+  borrower: Bytes!
+  assets: BigInt!
+  shares: BigInt!
+}
+
+type Repay @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  caller: Bytes!
+  borrower: Bytes!
+  assets: BigInt!
+  shares: BigInt!
+}
+
 type Transfer @entity {
   id: ID!
   market: Bytes!

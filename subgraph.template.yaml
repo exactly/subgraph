@@ -40,12 +40,17 @@ dataSources:
       entities:
         - Deposit
         - Withdraw
+        - Borrow
+        - Repay
+        - Transfer
         - DepositAtMaturity
         - WithdrawAtMaturity
         - BorrowAtMaturity
         - RepayAtMaturity
         - Liquidate
         - Seize
+        - EarningsAccumulatorSmoothFactorSet
+        - MarketUpdated
       abis:
         - name: {{ name }}
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
@@ -54,6 +59,10 @@ dataSources:
           handler: handleDeposit
         - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleWithdraw
+        - event: Borrow(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleBorrow
+        - event: Repay(indexed address,indexed address,uint256,uint256)
+          handler: handleRepay
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
 

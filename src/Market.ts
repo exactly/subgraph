@@ -1,6 +1,8 @@
 import {
   Deposit as DepositEvent,
   Withdraw as WithdrawEvent,
+  Borrow as BorrowEvent,
+  Repay as RepayEvent,
   Transfer as TransferEvent,
 
   DepositAtMaturity as DepositAtMaturityEvent,
@@ -15,7 +17,7 @@ import {
   MarketUpdated as MarketUpdatedEvent,
 } from '../generated/MarketWETH/MarketWETH';
 import {
-  Deposit, Withdraw, Transfer,
+  Deposit, Withdraw, Borrow, Repay, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
   Liquidate, Seize,
   EarningsAccumulatorSmoothFactorSet,
@@ -41,6 +43,29 @@ export function handleWithdraw(event: WithdrawEvent): void {
   entity.caller = event.params.caller;
   entity.receiver = event.params.receiver;
   entity.owner = event.params.owner;
+  entity.assets = event.params.assets;
+  entity.shares = event.params.shares;
+  entity.save();
+}
+
+export function handleBorrow(event: BorrowEvent): void {
+  let entity = new Borrow(toId(event));
+  entity.market = event.address;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.caller = event.params.caller;
+  entity.receiver = event.params.receiver;
+  entity.borrower = event.params.borrower;
+  entity.assets = event.params.assets;
+  entity.shares = event.params.shares;
+  entity.save();
+}
+
+export function handleRepay(event: RepayEvent): void {
+  let entity = new Repay(toId(event));
+  entity.market = event.address;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.caller = event.params.caller;
+  entity.borrower = event.params.borrower;
   entity.assets = event.params.assets;
   entity.shares = event.params.shares;
   entity.save();
