@@ -113,3 +113,21 @@ type MarketUpdated @entity {
   maturity: Int!
   maturityUnassignedEarnings: BigInt!
 }
+
+type FixedParametersSet @entity {
+  id: ID!
+  timestamp: Int!
+  curveA: BigInt!
+  curveB: BigInt!
+  maxUtilization: BigInt!
+  fullUtilization: BigInt!
+}
+
+type FloatingParametersSet @entity {
+  id: ID!
+  timestamp: Int!
+  curveA: BigInt!
+  curveB: BigInt!
+  maxUtilization: BigInt!
+  fullUtilization: BigInt!
+}
