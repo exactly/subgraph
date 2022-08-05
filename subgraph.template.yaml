@@ -21,7 +21,7 @@ dataSources:
         - WithdrawAtMaturity
         - BorrowAtMaturity
         - RepayAtMaturity
-        - LiquidateBorrow
+        - Liquidate
         - Seize
       abis:
         - name: {{ name }}
@@ -34,25 +34,23 @@ dataSources:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
 
-        - event: DepositAtMaturity(indexed uint256,indexed address,indexed address,uint256,uint256)
+        - event: DepositAtMaturity(indexed uint32,indexed address,indexed address,uint256,uint256)
           handler: handleDepositAtMaturity
-        - event: WithdrawAtMaturity(indexed uint256,address,indexed address,indexed address,uint256,uint256)
+        - event: WithdrawAtMaturity(indexed uint32,address,indexed address,indexed address,uint256,uint256)
           handler: handleWithdrawAtMaturity
-        - event: BorrowAtMaturity(indexed uint256,address,indexed address,indexed address,uint256,uint256)
+        - event: BorrowAtMaturity(indexed uint32,address,indexed address,indexed address,uint256,uint256)
           handler: handleBorrowAtMaturity
-        - event: RepayAtMaturity(indexed uint256,indexed address,indexed address,uint256,uint256)
+        - event: RepayAtMaturity(indexed uint32,indexed address,indexed address,uint256,uint256)
           handler: handleRepayAtMaturity
 
-        - event: LiquidateBorrow(indexed address,indexed address,uint256,uint256,indexed address,uint256)
-          handler: handleLiquidateBorrow
+        - event: Liquidate(indexed address,indexed address,uint256,uint256,indexed address,uint256)
+          handler: handleLiquidate
         - event: Seize(indexed address,indexed address,uint256)
           handler: handleSeize
 
         - event: EarningsAccumulatorSmoothFactorSet(uint128)
           handler: handleEarningsAccumulatorSmoothFactorSet
-        - event: MarketUpdated(uint256,uint256,uint256,uint256,uint256,uint256)
+        - event: MarketUpdated(uint256,uint256,uint256,uint256,uint256,uint256,indexed uint32,uint256)
           handler: handleMarketUpdated
-        - event: MarketUpdatedAtMaturity(uint256,uint256,uint256,uint256,indexed uint256,uint256)
-          handler: handleMarketUpdatedAtMaturity
       file: src/Market.ts
 {{/ Market }}

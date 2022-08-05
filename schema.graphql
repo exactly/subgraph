@@ -74,7 +74,7 @@ type RepayAtMaturity @entity {
   debtCovered: BigInt!
 }
 
-type LiquidateBorrow @entity {
+type Liquidate @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!
@@ -109,15 +109,6 @@ type MarketUpdated @entity {
   floatingAssets: BigInt!
   floatingBorrowShares: BigInt!
   floatingDebt: BigInt!
-  earningsAccumulator: BigInt!
-}
-
-type MarketUpdatedAtMaturity @entity {
-  id: ID!
-  market: Bytes!
-  timestamp: Int!
-  floatingDepositShares: BigInt!
-  floatingAssets: BigInt!
   earningsAccumulator: BigInt!
   maturity: Int!
   maturityUnassignedEarnings: BigInt!
