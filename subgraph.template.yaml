@@ -51,6 +51,9 @@ dataSources:
         - Seize
         - EarningsAccumulatorSmoothFactorSet
         - MarketUpdated
+        - FixedEarningsUpdated
+        - AccumulatorAccrued
+        - FloatingDebtUpdated
       abis:
         - name: {{ name }}
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
@@ -82,7 +85,13 @@ dataSources:
 
         - event: EarningsAccumulatorSmoothFactorSet(uint128)
           handler: handleEarningsAccumulatorSmoothFactorSet
-        - event: MarketUpdated(uint256,uint256,uint256,uint256,uint256,uint256,indexed uint32,uint256)
+        - event: MarketUpdated(uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleMarketUpdated
+        - event: FixedEarningsUpdated(uint256,indexed uint32,uint256)
+          handler: handleFixedEarningsUpdated
+        - event: AccumulatorAccrued(uint256)
+          handler: handleAccumulatorAccrued
+        - event: FloatingDebtUpdated(uint256,uint256)
+          handler: handleFloatingDebtUpdated
       file: src/Market.ts
 {{/ Market }}

@@ -131,8 +131,27 @@ type MarketUpdated @entity {
   floatingBorrowShares: BigInt!
   floatingDebt: BigInt!
   earningsAccumulator: BigInt!
+}
+
+type FixedEarningsUpdated @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
   maturity: Int!
-  maturityUnassignedEarnings: BigInt!
+  unassignedEarnings: BigInt!
+}
+
+type AccumulatorAccrued @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+}
+
+type FloatingDebtUpdated @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  utilization: BigInt!
 }
 
 type FixedParametersSet @entity {
