@@ -122,7 +122,7 @@ type EarningsAccumulatorSmoothFactorSet @entity {
   earningsAccumulatorSmoothFactor: BigInt!
 }
 
-type MarketUpdated @entity {
+type MarketUpdate @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!
@@ -133,7 +133,7 @@ type MarketUpdated @entity {
   earningsAccumulator: BigInt!
 }
 
-type FixedEarningsUpdated @entity {
+type FixedEarningsUpdate @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!
@@ -141,13 +141,13 @@ type FixedEarningsUpdated @entity {
   unassignedEarnings: BigInt!
 }
 
-type AccumulatorAccrued @entity {
+type AccumulatorAccrual @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!
 }
 
-type FloatingDebtUpdated @entity {
+type FloatingDebtUpdate @entity {
   id: ID!
   market: Bytes!
   timestamp: Int!

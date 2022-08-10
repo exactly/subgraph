@@ -14,17 +14,17 @@ import {
   Seize as SeizeEvent,
 
   EarningsAccumulatorSmoothFactorSet as EarningsAccumulatorSmoothFactorSetEvent,
-  MarketUpdated as MarketUpdatedEvent,
-  FixedEarningsUpdated as FixedEarningsUpdatedEvent,
-  AccumulatorAccrued as AccumulatorAccruedEvent,
-  FloatingDebtUpdated as FloatingDebtUpdatedEvent,
+  MarketUpdate as MarketUpdateEvent,
+  FixedEarningsUpdate as FixedEarningsUpdateEvent,
+  AccumulatorAccrual as AccumulatorAccrualEvent,
+  FloatingDebtUpdate as FloatingDebtUpdateEvent,
 } from '../generated/MarketWETH/MarketWETH';
 import {
   Deposit, Withdraw, Borrow, Repay, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
   Liquidate, Seize,
   EarningsAccumulatorSmoothFactorSet,
-  MarketUpdated, FixedEarningsUpdated, AccumulatorAccrued, FloatingDebtUpdated,
+  MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
 } from '../generated/schema';
 import toId from './utils/toId';
 
@@ -166,8 +166,8 @@ export function handleEarningsAccumulatorSmoothFactorSet(
   entity.save();
 }
 
-export function handleMarketUpdated(event: MarketUpdatedEvent): void {
-  let entity = new MarketUpdated(toId(event));
+export function handleMarketUpdate(event: MarketUpdateEvent): void {
+  let entity = new MarketUpdate(toId(event));
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toU32();
   entity.floatingDepositShares = event.params.floatingDepositShares;
@@ -178,8 +178,8 @@ export function handleMarketUpdated(event: MarketUpdatedEvent): void {
   entity.save();
 }
 
-export function handleFixedEarningsUpdated(event: FixedEarningsUpdatedEvent): void {
-  let entity = new FixedEarningsUpdated(toId(event));
+export function handleFixedEarningsUpdate(event: FixedEarningsUpdateEvent): void {
+  let entity = new FixedEarningsUpdate(toId(event));
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toU32();
   entity.maturity = event.params.maturity.toU32();
@@ -187,15 +187,15 @@ export function handleFixedEarningsUpdated(event: FixedEarningsUpdatedEvent): vo
   entity.save();
 }
 
-export function handleAccumulatorAccrued(event: AccumulatorAccruedEvent): void {
-  let entity = new AccumulatorAccrued(toId(event));
+export function handleAccumulatorAccrual(event: AccumulatorAccrualEvent): void {
+  let entity = new AccumulatorAccrual(toId(event));
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toU32();
   entity.save();
 }
 
-export function handleFloatingDebtUpdated(event: FloatingDebtUpdatedEvent): void {
-  let entity = new FloatingDebtUpdated(toId(event));
+export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
+  let entity = new FloatingDebtUpdate(toId(event));
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toU32();
   entity.utilization = event.params.utilization;

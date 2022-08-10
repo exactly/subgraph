@@ -18,7 +18,7 @@ module.exports = {
   InterestRateModel: from(get('InterestRateModel')),
   Market: deployments.map((file) => {
     const name = basename(file, '.json');
-    if (!name.startsWith('Market')) return null;
+    if (!name.startsWith('Market') || name.includes('_') || name.includes('Router')) return null;
 
     const deployment = get(name);
     if (deployment.args?.length < 2) return null;
