@@ -14,6 +14,8 @@ import {
   Seize as SeizeEvent,
 
   EarningsAccumulatorSmoothFactorSet as EarningsAccumulatorSmoothFactorSetEvent,
+  TreasurySet as TreasurySetEvent,
+
   MarketUpdate as MarketUpdateEvent,
   FixedEarningsUpdate as FixedEarningsUpdateEvent,
   AccumulatorAccrual as AccumulatorAccrualEvent,
@@ -23,7 +25,7 @@ import {
   Deposit, Withdraw, Borrow, Repay, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
   Liquidate, Seize,
-  EarningsAccumulatorSmoothFactorSet,
+  EarningsAccumulatorSmoothFactorSet, TreasurySet,
   MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
 } from '../generated/schema';
 import toId from './utils/toId';
@@ -163,6 +165,15 @@ export function handleEarningsAccumulatorSmoothFactorSet(
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toU32();
   entity.earningsAccumulatorSmoothFactor = event.params.earningsAccumulatorSmoothFactor;
+  entity.save();
+}
+
+export function handleTreasurySet(event: TreasurySetEvent): void {
+  let entity = new TreasurySet(toId(event));
+  entity.market = event.address;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.treasury = event.params.treasury;
+  entity.treasuryFeeRate = event.params.treasuryFeeRate;
   entity.save();
 }
 

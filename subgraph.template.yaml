@@ -50,6 +50,7 @@ dataSources:
         - Liquidate
         - Seize
         - EarningsAccumulatorSmoothFactorSet
+        - TreasurySet
         - MarketUpdate
         - FixedEarningsUpdate
         - AccumulatorAccrual
@@ -85,6 +86,9 @@ dataSources:
 
         - event: EarningsAccumulatorSmoothFactorSet(uint128)
           handler: handleEarningsAccumulatorSmoothFactorSet
+        - event: TreasurySet(address,uint128)
+          handler: handleTreasurySet
+
         - event: MarketUpdate(uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleMarketUpdate
         - event: FixedEarningsUpdate(uint256,indexed uint32,uint256)

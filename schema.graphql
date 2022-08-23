@@ -122,6 +122,14 @@ type EarningsAccumulatorSmoothFactorSet @entity {
   earningsAccumulatorSmoothFactor: BigInt!
 }
 
+type TreasurySet @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  treasury: Bytes!
+  treasuryFeeRate: BigInt!
+}
+
 type MarketUpdate @entity {
   id: ID!
   market: Bytes!
