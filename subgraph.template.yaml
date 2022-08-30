@@ -1,30 +1,7 @@
-specVersion: 0.0.2
+specVersion: 0.0.5
 schema:
   file: schema.graphql
 dataSources:
-  - kind: ethereum/contract
-    name: InterestRateModel
-    network: {{ network }}
-    source:
-      address: '{{ InterestRateModel.address }}'
-      startBlock: {{ InterestRateModel.startBlock }}
-      abi: InterestRateModel
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - FixedParametersSet
-        - FloatingParametersSet
-      abis:
-        - name: InterestRateModel
-          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/InterestRateModel.json
-      eventHandlers:
-        - event: FixedParametersSet((uint128,int128,uint128),uint128)
-          handler: handleFixedParametersSet
-        - event: FloatingParametersSet((uint128,int128,uint128),uint128)
-          handler: handleFloatingParametersSet
-      file: src/InterestRateModel.ts
 {{# Market }}
   - kind: ethereum/contract
     name: {{ name }}
@@ -35,7 +12,7 @@ dataSources:
       abi: {{ name }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Deposit
@@ -50,6 +27,7 @@ dataSources:
         - Liquidate
         - Seize
         - EarningsAccumulatorSmoothFactorSet
+        - InterestRateModelSet
         - TreasurySet
         - MarketUpdate
         - FixedEarningsUpdate
@@ -58,6 +36,8 @@ dataSources:
       abis:
         - name: {{ name }}
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
+        - name: InterestRateModel
+          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/InterestRateModel.json
       eventHandlers:
         - event: Deposit(indexed address,indexed address,uint256,uint256)
           handler: handleDeposit
@@ -86,6 +66,8 @@ dataSources:
 
         - event: EarningsAccumulatorSmoothFactorSet(uint128)
           handler: handleEarningsAccumulatorSmoothFactorSet
+        - event: InterestRateModelSet(indexed address)
+          handler: handleInterestRateModelSet
         - event: TreasurySet(address,uint128)
           handler: handleTreasurySet
 

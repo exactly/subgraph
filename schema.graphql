@@ -162,20 +162,15 @@ type FloatingDebtUpdate @entity {
   utilization: BigInt!
 }
 
-type FixedParametersSet @entity {
+type InterestRateModelSet @entity {
   id: ID!
+  market: Bytes!
   timestamp: Int!
-  curveA: BigInt!
-  curveB: BigInt!
-  maxUtilization: BigInt!
-  fullUtilization: BigInt!
-}
-
-type FloatingParametersSet @entity {
-  id: ID!
-  timestamp: Int!
-  curveA: BigInt!
-  curveB: BigInt!
-  maxUtilization: BigInt!
-  fullUtilization: BigInt!
+  interestRateModel: Bytes!
+  fixedCurveA: BigInt!
+  fixedCurveB: BigInt!
+  fixedMaxUtilization: BigInt!
+  floatingCurveA: BigInt!
+  floatingCurveB: BigInt!
+  floatingMaxUtilization: BigInt!
 }

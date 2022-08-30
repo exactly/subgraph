@@ -1,3 +1,4 @@
+import { InterestRateModel } from '../generated/MarketWETH/InterestRateModel';
 import {
   Deposit as DepositEvent,
   Withdraw as WithdrawEvent,
@@ -14,6 +15,7 @@ import {
   Seize as SeizeEvent,
 
   EarningsAccumulatorSmoothFactorSet as EarningsAccumulatorSmoothFactorSetEvent,
+  InterestRateModelSet as InterestRateModelSetEvent,
   TreasurySet as TreasurySetEvent,
 
   MarketUpdate as MarketUpdateEvent,
@@ -25,9 +27,10 @@ import {
   Deposit, Withdraw, Borrow, Repay, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
   Liquidate, Seize,
-  EarningsAccumulatorSmoothFactorSet, TreasurySet,
+  EarningsAccumulatorSmoothFactorSet, InterestRateModelSet, TreasurySet,
   MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
 } from '../generated/schema';
+import orZero from './utils/orZero';
 import toId from './utils/toId';
 
 export function handleDeposit(event: DepositEvent): void {
@@ -165,6 +168,23 @@ export function handleEarningsAccumulatorSmoothFactorSet(
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toU32();
   entity.earningsAccumulatorSmoothFactor = event.params.earningsAccumulatorSmoothFactor;
+  entity.save();
+}
+
+export function handleInterestRateModelSet(event: InterestRateModelSetEvent): void {
+  let entity = new InterestRateModelSet(toId(event));
+  entity.market = event.address;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.interestRateModel = event.params.interestRateModel;
+
+  const irm = InterestRateModel.bind(event.params.interestRateModel);
+  entity.fixedCurveA = orZero(irm.try_fixedCurveA());
+  entity.fixedCurveB = orZero(irm.try_fixedCurveB());
+  entity.fixedMaxUtilization = orZero(irm.try_fixedMaxUtilization());
+  entity.floatingCurveA = orZero(irm.try_floatingCurveA());
+  entity.floatingCurveB = orZero(irm.try_floatingCurveB());
+  entity.floatingMaxUtilization = orZero(irm.try_floatingMaxUtilization());
+
   entity.save();
 }
 
