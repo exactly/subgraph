@@ -15,7 +15,6 @@ const from = ({ address, receipt }, name) => ({ name, address, startBlock: recei
 
 module.exports = {
   network,
-  InterestRateModel: from(get('InterestRateModel')),
   Market: deployments.map((file) => {
     const name = basename(file, '.json');
     if (!name.startsWith('Market') || name.includes('_') || name.includes('Router')) return null;

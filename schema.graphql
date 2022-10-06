@@ -68,7 +68,7 @@ type WithdrawAtMaturity @entity {
   caller: Bytes!
   receiver: Bytes!
   owner: Bytes!
-  assets: BigInt!
+  positionAssets: BigInt!
   assetsDiscounted: BigInt!
 }
 

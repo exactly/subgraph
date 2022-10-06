@@ -8,25 +8,25 @@
     "auth": "graph auth --product hosted-service",
     "deploy": "graph deploy --product hosted-service",
     "prepare:mainnet": "cross-env NETWORK=mainnet mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
-    "prepare:rinkeby": "cross-env NETWORK=rinkeby mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
-    "postinstall": "run-s prepare:rinkeby codegen || cd ."
+    "prepare:goerli": "cross-env NETWORK=goerli mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
+    "postinstall": "run-s prepare:goerli codegen || cd ."
   },
   "engines": {
     "node": ">=16"
   },
   "dependencies": {
-    "@graphprotocol/graph-ts": "^0.27.0"
+    "@graphprotocol/graph-ts": "^0.28.0"
   },
   "devDependencies": {
     "@exactly-protocol/protocol": "exactly-protocol/protocol#deploy",
-    "@graphprotocol/graph-cli": "^0.33.1",
+    "@graphprotocol/graph-cli": "^0.34.0",
     "@types/mustache": "^4.2.1",
-    "@types/node": "^18.7.14",
-    "@typescript-eslint/eslint-plugin": "^5.36.1",
-    "@typescript-eslint/parser": "^5.36.1",
+    "@types/node": "^18.8.2",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.0.2",
-    "eslint": "^8.23.0",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.24.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
@@ -39,6 +39,6 @@
     "postinstall-postinstall": "^2.1.0",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.0",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.4"
   }
 }

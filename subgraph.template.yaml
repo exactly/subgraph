@@ -37,7 +37,7 @@ dataSources:
         - name: {{ name }}
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
         - name: InterestRateModel
-          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/InterestRateModel.json
+          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/InterestRateModelWETH.json
       eventHandlers:
         - event: Deposit(indexed address,indexed address,uint256,uint256)
           handler: handleDeposit
@@ -50,13 +50,13 @@ dataSources:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
 
-        - event: DepositAtMaturity(indexed uint32,indexed address,indexed address,uint256,uint256)
+        - event: DepositAtMaturity(indexed uint256,indexed address,indexed address,uint256,uint256)
           handler: handleDepositAtMaturity
-        - event: WithdrawAtMaturity(indexed uint32,address,indexed address,indexed address,uint256,uint256)
+        - event: WithdrawAtMaturity(indexed uint256,address,indexed address,indexed address,uint256,uint256)
           handler: handleWithdrawAtMaturity
-        - event: BorrowAtMaturity(indexed uint32,address,indexed address,indexed address,uint256,uint256)
+        - event: BorrowAtMaturity(indexed uint256,address,indexed address,indexed address,uint256,uint256)
           handler: handleBorrowAtMaturity
-        - event: RepayAtMaturity(indexed uint32,indexed address,indexed address,uint256,uint256)
+        - event: RepayAtMaturity(indexed uint256,indexed address,indexed address,uint256,uint256)
           handler: handleRepayAtMaturity
 
         - event: Liquidate(indexed address,indexed address,uint256,uint256,indexed address,uint256)
@@ -64,16 +64,16 @@ dataSources:
         - event: Seize(indexed address,indexed address,uint256)
           handler: handleSeize
 
-        - event: EarningsAccumulatorSmoothFactorSet(uint128)
+        - event: EarningsAccumulatorSmoothFactorSet(uint256)
           handler: handleEarningsAccumulatorSmoothFactorSet
         - event: InterestRateModelSet(indexed address)
           handler: handleInterestRateModelSet
-        - event: TreasurySet(address,uint128)
+        - event: TreasurySet(indexed address,uint256)
           handler: handleTreasurySet
 
         - event: MarketUpdate(uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleMarketUpdate
-        - event: FixedEarningsUpdate(uint256,indexed uint32,uint256)
+        - event: FixedEarningsUpdate(uint256,indexed uint256,uint256)
           handler: handleFixedEarningsUpdate
         - event: AccumulatorAccrual(uint256)
           handler: handleAccumulatorAccrual

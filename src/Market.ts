@@ -109,7 +109,7 @@ export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
   entity.caller = event.params.caller;
   entity.receiver = event.params.receiver;
   entity.owner = event.params.owner;
-  entity.assets = event.params.assets;
+  entity.positionAssets = event.params.positionAssets;
   entity.assetsDiscounted = event.params.assetsDiscounted;
   entity.save();
 }
@@ -146,7 +146,7 @@ export function handleLiquidate(event: LiquidateEvent): void {
   entity.receiver = event.params.receiver;
   entity.borrower = event.params.borrower;
   entity.assets = event.params.assets;
-  entity.collateralMarket = event.params.collateralMarket;
+  entity.collateralMarket = event.params.seizeMarket;
   entity.seizedAssets = event.params.seizedAssets;
   entity.save();
 }

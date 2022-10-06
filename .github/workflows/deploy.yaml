@@ -17,8 +17,8 @@ jobs:
       - run: npm run auth ${{ secrets.GRAPH_ACCESS_TOKEN }}
               
       - run: |
-          npm run prepare:rinkeby
-          npm run deploy exactly-protocol/exactly-rinkeby
+          npm run prepare:goerli
+          npm run deploy exactly-protocol/exactly-goerli
       
       - run: |
           npm run prepare:mainnet
