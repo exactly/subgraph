@@ -69,7 +69,7 @@ type WithdrawAtMaturity @entity {
   receiver: Bytes!
   owner: Bytes!
   positionAssets: BigInt!
-  assetsDiscounted: BigInt!
+  assets: BigInt!
 }
 
 type BorrowAtMaturity @entity {

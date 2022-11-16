@@ -110,7 +110,7 @@ export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
   entity.receiver = event.params.receiver;
   entity.owner = event.params.owner;
   entity.positionAssets = event.params.positionAssets;
-  entity.assetsDiscounted = event.params.assetsDiscounted;
+  entity.assets = event.params.assets;
   entity.save();
 }
 
