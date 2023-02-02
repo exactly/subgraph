@@ -5,8 +5,8 @@
     "build": "graph build",
     "codegen": "graph codegen",
     "lint": "eslint --ext .ts,.js .",
-    "auth": "graph auth --product hosted-service",
-    "deploy": "graph deploy --product hosted-service",
+    "auth": "graph auth --studio",
+    "deploy": "graph deploy --studio",
     "prepare:mainnet": "cross-env NETWORK=mainnet mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "prepare:goerli": "cross-env NETWORK=goerli mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "postinstall": "run-s prepare:goerli codegen || cd ."
