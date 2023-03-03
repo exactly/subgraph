@@ -8,6 +8,7 @@
     "auth": "graph auth --studio",
     "deploy": "graph deploy --studio",
     "prepare:mainnet": "cross-env NETWORK=mainnet mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
+    "prepare:optimism": "cross-env NETWORK=optimism mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "prepare:goerli": "cross-env NETWORK=goerli mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "postinstall": "run-s prepare:goerli codegen || cd ."
   },
