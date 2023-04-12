@@ -1,3 +1,4 @@
+import { Address } from '@graphprotocol/graph-ts';
 import { InterestRateModel } from '../generated/MarketWETH/InterestRateModel';
 import {
   Deposit as DepositEvent,
@@ -30,6 +31,7 @@ import {
   EarningsAccumulatorSmoothFactorSet, InterestRateModelSet, TreasurySet,
   MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
 } from '../generated/schema';
+import { loadAccount, loadFixedPosition } from './utils/loaders';
 import orZero from './utils/orZero';
 import toId from './utils/toId';
 
@@ -66,6 +68,10 @@ export function handleBorrow(event: BorrowEvent): void {
   entity.assets = event.params.assets;
   entity.shares = event.params.shares;
   entity.save();
+
+  let account = loadAccount(entity.borrower, entity.market);
+  account.borrowShares = account.borrowShares.plus(entity.shares);
+  account.save();
 }
 
 export function handleRepay(event: RepayEvent): void {
@@ -77,6 +83,10 @@ export function handleRepay(event: RepayEvent): void {
   entity.assets = event.params.assets;
   entity.shares = event.params.shares;
   entity.save();
+
+  let account = loadAccount(entity.borrower, entity.market);
+  account.borrowShares = (account.borrowShares).minus(entity.shares);
+  account.save();
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -87,6 +97,17 @@ export function handleTransfer(event: TransferEvent): void {
   entity.to = event.params.to;
   entity.shares = event.params.amount;
   entity.save();
+
+  if (entity.to.notEqual(Address.zero())) {
+    let accountTo = loadAccount(entity.to, entity.market);
+    accountTo.depositShares = accountTo.depositShares.plus(entity.shares);
+    accountTo.save();
+  }
+  if (entity.from.notEqual(Address.zero())) {
+    let accountFrom = loadAccount(entity.from, entity.market);
+    accountFrom.depositShares = (accountFrom.depositShares).minus(entity.shares);
+    accountFrom.save();
+  }
 }
 
 export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
@@ -99,6 +120,10 @@ export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
   entity.assets = event.params.assets;
   entity.fee = event.params.fee;
   entity.save();
+
+  let position = loadFixedPosition(entity.owner, entity.market, entity.maturity);
+  position.amount = position.amount.plus(entity.assets.plus(entity.fee));
+  position.save();
 }
 
 export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
@@ -112,6 +137,10 @@ export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
   entity.positionAssets = event.params.positionAssets;
   entity.assets = event.params.assets;
   entity.save();
+
+  let position = loadFixedPosition(entity.owner, entity.market, entity.maturity);
+  position.amount = position.amount.minus(entity.positionAssets);
+  position.save();
 }
 
 export function handleBorrowAtMaturity(event: BorrowAtMaturityEvent): void {
@@ -125,6 +154,10 @@ export function handleBorrowAtMaturity(event: BorrowAtMaturityEvent): void {
   entity.assets = event.params.assets;
   entity.fee = event.params.fee;
   entity.save();
+
+  let position = loadFixedPosition(entity.borrower, entity.market, entity.maturity, true);
+  position.amount = position.amount.minus(entity.assets.plus(entity.fee));
+  position.save();
 }
 
 export function handleRepayAtMaturity(event: RepayAtMaturityEvent): void {
@@ -137,6 +170,10 @@ export function handleRepayAtMaturity(event: RepayAtMaturityEvent): void {
   entity.assets = event.params.assets;
   entity.debtCovered = event.params.positionAssets;
   entity.save();
+
+  let position = loadFixedPosition(entity.borrower, entity.market, entity.maturity, true);
+  position.amount = position.amount.plus(entity.debtCovered);
+  position.save();
 }
 
 export function handleLiquidate(event: LiquidateEvent): void {

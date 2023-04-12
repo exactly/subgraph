@@ -174,3 +174,21 @@ type InterestRateModelSet @entity {
   floatingCurveB: BigInt!
   floatingMaxUtilization: BigInt!
 }
+
+type Account @entity {
+  id: ID! # address-market
+  address: Bytes!
+  market: Bytes!
+  borrowShares: BigInt!
+  depositShares: BigInt!
+  fixedPositions: [FixedPosition!]!
+}
+
+type FixedPosition @entity {
+  id: ID! # account-market-maturity-(deposit||borrow)(0||1)
+  account: Bytes!
+  amount: BigInt!
+  borrow: Boolean!
+  market: Bytes!
+  maturity: Int!
+}
