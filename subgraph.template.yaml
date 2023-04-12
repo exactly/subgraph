@@ -33,6 +33,8 @@ dataSources:
         - FixedEarningsUpdate
         - AccumulatorAccrual
         - FloatingDebtUpdate
+        - Account
+        - FixedPosition
       abis:
         - name: {{ name }}
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
