@@ -19,7 +19,7 @@
     "@graphprotocol/graph-ts": "^0.29.3"
   },
   "devDependencies": {
-    "@exactly-protocol/protocol": "^0.2.7",
+    "@exactly-protocol/protocol": "^0.2.9",
     "@graphprotocol/graph-cli": "^0.40.0",
     "@types/mustache": "^4.2.2",
     "@types/node": "^18.13.0",
