@@ -32,7 +32,6 @@ import {
   MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
 } from '../generated/schema';
 import { loadAccount, loadFixedPosition } from './utils/loaders';
-import orZero from './utils/orZero';
 import toId from './utils/toId';
 
 export function handleDeposit(event: DepositEvent): void {
@@ -215,12 +214,12 @@ export function handleInterestRateModelSet(event: InterestRateModelSetEvent): vo
   entity.interestRateModel = event.params.interestRateModel;
 
   const irm = InterestRateModel.bind(event.params.interestRateModel);
-  entity.fixedCurveA = orZero(irm.try_fixedCurveA());
-  entity.fixedCurveB = orZero(irm.try_fixedCurveB());
-  entity.fixedMaxUtilization = orZero(irm.try_fixedMaxUtilization());
-  entity.floatingCurveA = orZero(irm.try_floatingCurveA());
-  entity.floatingCurveB = orZero(irm.try_floatingCurveB());
-  entity.floatingMaxUtilization = orZero(irm.try_floatingMaxUtilization());
+  entity.fixedCurveA = irm.fixedCurveA();
+  entity.fixedCurveB = irm.fixedCurveB();
+  entity.fixedMaxUtilization = irm.fixedMaxUtilization();
+  entity.floatingCurveA = irm.floatingCurveA();
+  entity.floatingCurveB = irm.floatingCurveB();
+  entity.floatingMaxUtilization = irm.floatingMaxUtilization();
 
   entity.save();
 }
