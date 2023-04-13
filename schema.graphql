@@ -181,15 +181,14 @@ type Account @entity {
   market: Bytes!
   borrowShares: BigInt!
   depositShares: BigInt!
-  fixedPositions: [FixedPosition!]!
   isCollateral: Boolean
+  fixedPositions: [FixedPosition!]! @derivedFrom(field: "account")
 }
 
 type FixedPosition @entity {
   id: ID! # account-market-maturity-(deposit||borrow)(0||1)
-  account: Bytes!
+  account: Account!
   amount: BigInt!
   borrow: Boolean!
-  market: Bytes!
   maturity: Int!
 }

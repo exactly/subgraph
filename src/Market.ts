@@ -120,7 +120,7 @@ export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
   entity.fee = event.params.fee;
   entity.save();
 
-  let position = loadFixedPosition(entity.owner, entity.market, entity.maturity);
+  let position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
   position.amount = position.amount.plus(entity.assets.plus(entity.fee));
   position.save();
 }
@@ -137,7 +137,7 @@ export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
   entity.assets = event.params.assets;
   entity.save();
 
-  let position = loadFixedPosition(entity.owner, entity.market, entity.maturity);
+  let position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
   position.amount = position.amount.minus(entity.positionAssets);
   position.save();
 }
@@ -154,8 +154,12 @@ export function handleBorrowAtMaturity(event: BorrowAtMaturityEvent): void {
   entity.fee = event.params.fee;
   entity.save();
 
-  let position = loadFixedPosition(entity.borrower, entity.market, entity.maturity, true);
-  position.amount = position.amount.minus(entity.assets.plus(entity.fee));
+  let position = loadFixedPosition(
+    loadAccount(entity.borrower, entity.market),
+    entity.maturity,
+    true,
+  );
+  position.amount = position.amount.plus(entity.assets.plus(entity.fee));
   position.save();
 }
 
@@ -170,8 +174,12 @@ export function handleRepayAtMaturity(event: RepayAtMaturityEvent): void {
   entity.debtCovered = event.params.positionAssets;
   entity.save();
 
-  let position = loadFixedPosition(entity.borrower, entity.market, entity.maturity, true);
-  position.amount = position.amount.plus(entity.debtCovered);
+  let position = loadFixedPosition(
+    loadAccount(entity.borrower, entity.market),
+    entity.maturity,
+    true,
+  );
+  position.amount = position.amount.minus(entity.debtCovered);
   position.save();
 }
 

@@ -11,27 +11,20 @@ export function loadAccount(address: Bytes, market: Bytes): Account {
   account.market = market;
   account.depositShares = BigInt.zero();
   account.borrowShares = BigInt.zero();
-  account.fixedPositions = [];
   return account;
 }
 
 export function loadFixedPosition(
-  address: Bytes,
-  market: Bytes,
+  account: Account,
   maturity: u32,
   borrow: boolean = false,
 ): FixedPosition {
-  let id = `${address.toHexString()}-${market.toHexString()}-${maturity}-${borrow ? 1 : 0}`;
+  let id = `${account.id}-${maturity}-${borrow ? 1 : 0}`;
   let fixedPosition = FixedPosition.load(id);
   if (fixedPosition) return fixedPosition;
 
-  let account = loadAccount(address, market);
-  account.fixedPositions.push(id);
-  account.save();
-
   fixedPosition = new FixedPosition(id);
-  fixedPosition.account = address;
-  fixedPosition.market = market;
+  fixedPosition.account = account.id;
   fixedPosition.maturity = maturity;
   fixedPosition.amount = BigInt.zero();
   fixedPosition.borrow = borrow;
