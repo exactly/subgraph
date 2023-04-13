@@ -182,6 +182,7 @@ type Account @entity {
   borrowShares: BigInt!
   depositShares: BigInt!
   fixedPositions: [FixedPosition!]!
+  isCollateral: Boolean
 }
 
 type FixedPosition @entity {
