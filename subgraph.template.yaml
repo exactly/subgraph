@@ -2,6 +2,31 @@ specVersion: 0.0.5
 schema:
   file: schema.graphql
 dataSources:
+{{# Auditor }}
+  - kind: ethereum/contract
+    name: Auditor
+    network: {{ network }}
+    source:
+      address: '{{ address }}'
+      startBlock: {{ startBlock }}
+      abi: Auditor
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - MarketEntered
+        - MarketExited
+      abis:
+        - name: Auditor
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/Auditor.json
+      eventHandlers:
+        - event: MarketEntered(indexed address,indexed address)
+          handler: handleMarketEntered
+        - event: MarketExited(indexed address,indexed address)
+          handler: handleMarketExited
+      file: src/Auditor.ts
+{{/ Auditor }}
 {{# Market }}
   - kind: ethereum/contract
     name: {{ name }}
