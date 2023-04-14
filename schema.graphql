@@ -192,3 +192,51 @@ type FixedPosition @entity {
   borrow: Boolean!
   maturity: Int!
 }
+
+type MarketList @entity {
+  id: ID!
+  market: Bytes!
+  decimals: Int!
+  timestamp: Int!
+  block: Int!
+}
+
+type MarketEnter @entity {
+  id: ID!
+  account: Bytes!
+  market: Bytes!
+  timestamp: Int!
+  block: Int!
+}
+
+type MarketExit @entity {
+  id: ID!
+  account: Bytes!
+  market: Bytes!
+  timestamp: Int!
+  block: Int!
+}
+
+type AdjustFactorSet @entity {
+  id: ID!
+  market: Bytes!
+  adjustFactor: BigInt!
+  timestamp: Int!
+  block: Int!
+}
+
+type LiquidationIncentiveSet @entity {
+  id: ID!
+  liquidator: BigInt!
+  lenders: BigInt!
+  timestamp: Int!
+  block: Int!
+}
+
+type PriceFeedSet @entity {
+  id: ID!
+  market: Bytes!
+  priceFeed: Bytes!
+  timestamp: Int!
+  block: Int!
+}

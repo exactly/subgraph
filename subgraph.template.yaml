@@ -15,16 +15,28 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - MarketEntered
-        - MarketExited
+        - MarketList
+        - MarketEnter
+        - MarketExit
+        - AdjustFactorSet
+        - LiquidationIncentiveSet
+        - PriceFeedSet
       abis:
         - name: Auditor
           file: node_modules/@exactly/protocol/deployments/{{ network }}/Auditor.json
       eventHandlers:
+        - event: MarketListed(indexed address,uint8)
+          handler: handleMarketListed
         - event: MarketEntered(indexed address,indexed address)
           handler: handleMarketEntered
         - event: MarketExited(indexed address,indexed address)
           handler: handleMarketExited
+        - event: AdjustFactorSet(indexed address,uint256)
+          handler: handleAdjustFactorSet
+        - event: LiquidationIncentiveSet((uint128,uint128))
+          handler: handleLiquidationIncentiveSet
+        - event: PriceFeedSet(indexed address,indexed address)
+          handler: handlePriceFeedSet
       file: src/Auditor.ts
 {{/ Auditor }}
 {{# Market }}
