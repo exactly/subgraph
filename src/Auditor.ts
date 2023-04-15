@@ -9,8 +9,7 @@ import {
 import {
   MarketExit, MarketEnter, MarketList, AdjustFactorSet, LiquidationIncentiveSet, PriceFeedSet,
 } from '../generated/schema';
-
-import { loadAccount } from './utils/loaders';
+import loadAccount from './utils/loadAccount';
 
 export function handleMarketListed(event: MarketListedEvent): void {
   let marketList = new MarketList(event.transaction.hash.toHex());

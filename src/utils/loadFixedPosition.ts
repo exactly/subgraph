@@ -1,20 +1,7 @@
-import { BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import { Account, FixedPosition } from '../../generated/schema';
 
-export function loadAccount(address: Bytes, market: Bytes): Account {
-  let id = `${address.toHexString()}-${market.toHexString()}`;
-  let account = Account.load(id);
-  if (account) return account;
-
-  account = new Account(id);
-  account.address = address;
-  account.market = market;
-  account.depositShares = BigInt.zero();
-  account.borrowShares = BigInt.zero();
-  return account;
-}
-
-export function loadFixedPosition(
+export default function loadFixedPosition(
   account: Account,
   maturity: u32,
   borrow: boolean = false,
