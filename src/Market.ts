@@ -34,6 +34,8 @@ import {
 import toId from './utils/toId';
 import loadFixedPosition from './utils/loadFixedPosition';
 import loadAccount from './utils/loadAccount';
+import loadMarket from './utils/loadMarket';
+import loadFixedPool from './utils/loadFixedPool';
 
 export function handleDeposit(event: DepositEvent): void {
   let entity = new Deposit(toId(event));
@@ -214,6 +216,12 @@ export function handleEarningsAccumulatorSmoothFactorSet(
   entity.timestamp = event.block.timestamp.toU32();
   entity.earningsAccumulatorSmoothFactor = event.params.earningsAccumulatorSmoothFactor;
   entity.save();
+
+  let market = loadMarket(entity.market);
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
+  market.earningsAccumulatorSmoothFactor = entity.earningsAccumulatorSmoothFactor;
+  market.save();
 }
 
 export function handleInterestRateModelSet(event: InterestRateModelSetEvent): void {
@@ -231,6 +239,19 @@ export function handleInterestRateModelSet(event: InterestRateModelSetEvent): vo
   entity.floatingMaxUtilization = irm.floatingMaxUtilization();
 
   entity.save();
+
+  let market = loadMarket(entity.market);
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
+
+  market.interestRateModel = entity.interestRateModel;
+  market.fixedCurveA = entity.fixedCurveA;
+  market.fixedCurveB = entity.fixedCurveB;
+  market.fixedMaxUtilization = entity.fixedMaxUtilization;
+  market.floatingCurveA = entity.floatingCurveA;
+  market.floatingCurveB = entity.floatingCurveB;
+  market.floatingMaxUtilization = entity.floatingMaxUtilization;
+  market.save();
 }
 
 export function handleTreasurySet(event: TreasurySetEvent): void {
@@ -240,6 +261,13 @@ export function handleTreasurySet(event: TreasurySetEvent): void {
   entity.treasury = event.params.treasury;
   entity.treasuryFeeRate = event.params.treasuryFeeRate;
   entity.save();
+
+  let market = loadMarket(entity.market);
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
+  market.treasury = entity.treasury;
+  market.treasuryFeeRate = entity.treasuryFeeRate;
+  market.save();
 }
 
 export function handleMarketUpdate(event: MarketUpdateEvent): void {
@@ -252,6 +280,17 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   entity.floatingDebt = event.params.floatingDebt;
   entity.earningsAccumulator = event.params.earningsAccumulator;
   entity.save();
+
+  let market = loadMarket(entity.market);
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
+  market.lastMarketUpdate = entity.timestamp;
+  market.floatingDepositShares = entity.floatingDepositShares;
+  market.floatingAssets = entity.floatingAssets;
+  market.floatingBorrowShares = entity.floatingBorrowShares;
+  market.floatingDebt = entity.floatingDebt;
+  market.earningsAccumulator = entity.earningsAccumulator;
+  market.save();
 }
 
 export function handleFixedEarningsUpdate(event: FixedEarningsUpdateEvent): void {
@@ -261,6 +300,11 @@ export function handleFixedEarningsUpdate(event: FixedEarningsUpdateEvent): void
   entity.maturity = event.params.maturity.toU32();
   entity.unassignedEarnings = event.params.unassignedEarnings;
   entity.save();
+
+  let fixedPool = loadFixedPool(loadMarket(entity.market), entity.maturity);
+  fixedPool.timestamp = entity.timestamp;
+  fixedPool.unassignedEarnings = entity.unassignedEarnings;
+  fixedPool.save();
 }
 
 export function handleAccumulatorAccrual(event: AccumulatorAccrualEvent): void {
@@ -268,6 +312,12 @@ export function handleAccumulatorAccrual(event: AccumulatorAccrualEvent): void {
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toU32();
   entity.save();
+
+  let market = loadMarket(entity.market);
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
+  market.lastAccumulatorAccrual = entity.timestamp;
+  market.save();
 }
 
 export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
@@ -276,4 +326,11 @@ export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
   entity.timestamp = event.params.timestamp.toU32();
   entity.utilization = event.params.utilization;
   entity.save();
+
+  let market = loadMarket(entity.market);
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
+  market.floatingUtilization = entity.utilization;
+  market.lastFloatingDebtUpdate = entity.timestamp;
+  market.save();
 }

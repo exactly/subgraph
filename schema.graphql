@@ -240,3 +240,46 @@ type PriceFeedSet @entity {
   timestamp: Int!
   block: Int!
 }
+
+type Market @entity {
+  id: ID! # market
+  address: Bytes!
+  # global
+  timestamp: Int!
+  block: Int!
+  # MarketUpdate
+  lastMarketUpdate: Int
+  floatingDepositShares: BigInt
+  floatingAssets: BigInt
+  floatingBorrowShares: BigInt
+  floatingDebt: BigInt
+  earningsAccumulator: BigInt
+  # FloatingDebtUpdate
+  floatingUtilization: BigInt
+  lastFloatingDebtUpdate: Int
+  # InterestRateModelSet
+  interestRateModel: Bytes
+  fixedCurveA: BigInt
+  fixedCurveB: BigInt
+  fixedMaxUtilization: BigInt
+  floatingCurveA: BigInt
+  floatingCurveB: BigInt
+  floatingMaxUtilization: BigInt
+  # AccumulatorAccrual
+  lastAccumulatorAccrual: Int
+  # EarningsAccumulatorSmoothFactorSet
+  earningsAccumulatorSmoothFactor: BigInt
+  # TreasurySet
+  treasury: Bytes
+  treasuryFeeRate: BigInt
+  # FixedEarningsUpdate
+  fixedPools: [FixedPool!] @derivedFrom(field: "market")
+}
+
+type FixedPool @entity {
+  id: ID! # market-maturity
+  market: Market!
+  maturity: Int!
+  timestamp: Int!
+  unassignedEarnings: BigInt!
+}
