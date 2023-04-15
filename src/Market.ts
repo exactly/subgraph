@@ -31,8 +31,9 @@ import {
   EarningsAccumulatorSmoothFactorSet, InterestRateModelSet, TreasurySet,
   MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
 } from '../generated/schema';
-import { loadAccount, loadFixedPosition } from './utils/loaders';
 import toId from './utils/toId';
+import loadFixedPosition from './utils/loadFixedPosition';
+import loadAccount from './utils/loadAccount';
 
 export function handleDeposit(event: DepositEvent): void {
   let entity = new Deposit(toId(event));
