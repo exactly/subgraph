@@ -24,6 +24,10 @@ dataSources:
       abis:
         - name: Auditor
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/Auditor.json
+        - name: Market
+          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/MarketWETH.json
+        - name: ERC20
+          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/WETH.json
       eventHandlers:
         - event: MarketListed(indexed address,uint8)
           handler: handleMarketListed
@@ -46,7 +50,7 @@ dataSources:
     source:
       address: '{{ address }}'
       startBlock: {{ startBlock }}
-      abi: {{ name }}
+      abi: Market
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -72,9 +76,13 @@ dataSources:
         - FloatingDebtUpdate
         - Account
         - FixedPosition
+        - MaxFuturePoolsSet
+        - PenaltyRateSet
+        - ReserveFactorSet
+        - BackupFeeRateSet
       abis:
-        - name: {{ name }}
-          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
+        - name: Market
+          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/MarketWETH.json
         - name: InterestRateModel
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/InterestRateModelWETH.json
       eventHandlers:
@@ -118,5 +126,13 @@ dataSources:
           handler: handleAccumulatorAccrual
         - event: FloatingDebtUpdate(uint256,uint256)
           handler: handleFloatingDebtUpdate
+        - event: MaxFuturePoolsSet(uint256)
+          handler: handleMaxFuturePoolsSet
+        - event: PenaltyRateSet(uint256)
+          handler: handlePenaltyRateSet
+        - event: ReserveFactorSet(uint256)
+          handler: handleReserveFactorSet
+        - event: BackupFeeRateSet(uint256)
+          handler: handleBackupFeeRateSet
       file: src/Market.ts
 {{/ Market }}
