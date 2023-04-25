@@ -75,6 +75,8 @@ dataSources:
       abis:
         - name: {{ name }}
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
+        - name: MarketWETH
+          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/MarketWETH.json
         - name: InterestRateModel
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/InterestRateModelWETH.json
       eventHandlers:

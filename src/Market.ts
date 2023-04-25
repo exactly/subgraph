@@ -290,6 +290,7 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   market.floatingBorrowShares = entity.floatingBorrowShares;
   market.floatingDebt = entity.floatingDebt;
   market.earningsAccumulator = entity.earningsAccumulator;
+  market.decimals = MarketWETH.bind(Address.fromBytes(entity.market)).decimals();
   market.save();
 }
 

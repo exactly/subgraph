@@ -274,6 +274,8 @@ type Market @entity {
   treasuryFeeRate: BigInt
   # FixedEarningsUpdate
   fixedPools: [FixedPool!] @derivedFrom(field: "market")
+  symbol: String
+  decimals: Int
 }
 
 type FixedPool @entity {
