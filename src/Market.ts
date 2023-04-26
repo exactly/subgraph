@@ -1,4 +1,4 @@
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { InterestRateModel } from '../generated/MarketWETH/InterestRateModel';
 import {
   Deposit as DepositEvent,
@@ -36,6 +36,7 @@ import loadFixedPosition from './utils/loadFixedPosition';
 import loadAccount from './utils/loadAccount';
 import loadMarket from './utils/loadMarket';
 import loadFixedPool from './utils/loadFixedPool';
+import fixedRate from './utils/fixedRate';
 
 export function handleDeposit(event: DepositEvent): void {
   let entity = new Deposit(toId(event));
@@ -113,7 +114,7 @@ export function handleTransfer(event: TransferEvent): void {
 }
 
 export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
-  let entity = new DepositAtMaturity(toId(event));
+  const entity = new DepositAtMaturity(toId(event));
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toU32();
   entity.maturity = event.params.maturity.toU32();
@@ -123,13 +124,18 @@ export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
   entity.fee = event.params.fee;
   entity.save();
 
-  let position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
-  position.amount = position.amount.plus(entity.assets.plus(entity.fee));
+  const position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
+  const totalAmount = position.principal.plus(entity.assets);
+  position.rate = (position.principal.times(position.rate).plus(entity.assets
+    .times(fixedRate(entity.assets, entity.fee, entity.timestamp, entity.maturity)))
+  ).div(totalAmount);
+  position.principal = totalAmount;
+  position.fee = position.fee.plus(entity.fee);
   position.save();
 }
 
 export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
-  let entity = new WithdrawAtMaturity(toId(event));
+  const entity = new WithdrawAtMaturity(toId(event));
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toU32();
   entity.maturity = event.params.maturity.toU32();
@@ -140,13 +146,19 @@ export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
   entity.assets = event.params.assets;
   entity.save();
 
-  let position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
-  position.amount = position.amount.minus(entity.positionAssets);
+  const position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
+  const principal = entity.positionAssets.times(position.principal)
+    .div(position.principal.plus(position.fee));
+  const fee = entity.positionAssets.minus(principal);
+  position.principal = position.principal.minus(principal);
+  position.fee = position.fee.minus(fee);
+
+  if (position.principal.equals(BigInt.zero())) position.rate = BigInt.zero();
   position.save();
 }
 
 export function handleBorrowAtMaturity(event: BorrowAtMaturityEvent): void {
-  let entity = new BorrowAtMaturity(toId(event));
+  const entity = new BorrowAtMaturity(toId(event));
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toU32();
   entity.maturity = event.params.maturity.toU32();
@@ -157,17 +169,22 @@ export function handleBorrowAtMaturity(event: BorrowAtMaturityEvent): void {
   entity.fee = event.params.fee;
   entity.save();
 
-  let position = loadFixedPosition(
+  const position = loadFixedPosition(
     loadAccount(entity.borrower, entity.market),
     entity.maturity,
     true,
   );
-  position.amount = position.amount.plus(entity.assets.plus(entity.fee));
+  const totalAmount = position.principal.plus(entity.assets);
+  position.rate = (position.principal.times(position.rate).plus(entity.assets
+    .times(fixedRate(entity.assets, entity.fee, entity.timestamp, entity.maturity)))
+  ).div(totalAmount);
+  position.fee = position.fee.plus(entity.fee);
+  position.principal = totalAmount;
   position.save();
 }
 
 export function handleRepayAtMaturity(event: RepayAtMaturityEvent): void {
-  let entity = new RepayAtMaturity(toId(event));
+  const entity = new RepayAtMaturity(toId(event));
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toU32();
   entity.maturity = event.params.maturity.toU32();
@@ -177,12 +194,18 @@ export function handleRepayAtMaturity(event: RepayAtMaturityEvent): void {
   entity.debtCovered = event.params.positionAssets;
   entity.save();
 
-  let position = loadFixedPosition(
+  const position = loadFixedPosition(
     loadAccount(entity.borrower, entity.market),
     entity.maturity,
     true,
   );
-  position.amount = position.amount.minus(entity.debtCovered);
+  const principal = entity.debtCovered.times(position.principal)
+    .div(position.principal.plus(position.fee));
+  const fee = entity.debtCovered.minus(principal);
+  position.principal = position.principal.minus(principal);
+  position.fee = position.fee.minus(fee);
+
+  if (position.principal.equals(BigInt.zero())) position.rate = BigInt.zero();
   position.save();
 }
 

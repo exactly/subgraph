@@ -188,9 +188,11 @@ type Account @entity {
 type FixedPosition @entity {
   id: ID! # account-market-maturity-(deposit||borrow)(0||1)
   account: Account!
-  amount: BigInt!
+  principal: BigInt!
+  fee: BigInt!
   borrow: Boolean!
   maturity: Int!
+  rate: BigInt!
 }
 
 type MarketList @entity {
