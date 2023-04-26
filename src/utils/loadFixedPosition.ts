@@ -13,7 +13,9 @@ export default function loadFixedPosition(
   fixedPosition = new FixedPosition(id);
   fixedPosition.account = account.id;
   fixedPosition.maturity = maturity;
-  fixedPosition.amount = BigInt.zero();
+  fixedPosition.principal = BigInt.zero();
+  fixedPosition.fee = BigInt.zero();
   fixedPosition.borrow = borrow;
+  fixedPosition.rate = BigInt.zero();
   return fixedPosition;
 }
