@@ -254,6 +254,12 @@ type Market @entity {
   floatingBorrowShares: BigInt
   floatingDebt: BigInt
   earningsAccumulator: BigInt
+  decimals: Int
+  priceFeed: Bytes
+  adjustFactor: BigInt
+  assetSymbol: String
+  symbol: String
+  asset: Bytes
   # FloatingDebtUpdate
   floatingUtilization: BigInt
   lastFloatingDebtUpdate: Int
@@ -274,8 +280,21 @@ type Market @entity {
   treasuryFeeRate: BigInt
   # FixedEarningsUpdate
   fixedPools: [FixedPool!] @derivedFrom(field: "market")
-  symbol: String
-  decimals: Int
+  # MaxFuturePoolsSet
+  maxFuturePools: Int
+  # BackupFeeRateSet
+  backupFeeRate: BigInt
+  # ReserveFactorSet
+  reserveFactor: BigInt
+  # PenaltyRateSet
+  penaltyRate: BigInt
+  # Deposit
+  totalAssets: BigInt!
+  # Borrow
+  totalSupply: BigInt!
+  totalFloatingBorrowShares: BigInt!
+  totalFloatingBorrowAssets: BigInt!
+  # TODO: add rewardsController after contract is deployed
 }
 
 type FixedPool @entity {
@@ -284,4 +303,36 @@ type FixedPool @entity {
   maturity: Int!
   timestamp: Int!
   unassignedEarnings: BigInt!
+}
+
+type MaxFuturePoolsSet @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  maxFuturePools: Int!
+  block: Int!
+}
+
+type PenaltyRateSet @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  penaltyRate: BigInt!
+  block: Int!
+}
+
+type ReserveFactorSet @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  reserveFactor: BigInt!
+  block: Int!
+}
+
+type BackupFeeRateSet @entity {
+  id: ID!
+  market: Bytes!
+  timestamp: Int!
+  backupFeeRate: BigInt!
+  block: Int!
 }

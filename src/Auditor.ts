@@ -7,9 +7,14 @@ import {
   PriceFeedSet as PriceFeedSetEvent,
 } from '../generated/Auditor/Auditor';
 import {
-  MarketExit, MarketEnter, MarketList, AdjustFactorSet, LiquidationIncentiveSet, PriceFeedSet,
+  AdjustFactorSet, LiquidationIncentiveSet,
+  MarketEnter,
+  MarketExit,
+  MarketList,
+  PriceFeedSet,
 } from '../generated/schema';
 import loadAccount from './utils/loadAccount';
+import loadMarket from './utils/loadMarket';
 
 export function handleMarketListed(event: MarketListedEvent): void {
   let marketList = new MarketList(event.transaction.hash.toHex());
@@ -53,6 +58,10 @@ export function handleAdjustFactorSet(event: AdjustFactorSetEvent): void {
   adjustFactorSet.timestamp = event.block.timestamp.toU32();
   adjustFactorSet.block = event.block.number.toU32();
   adjustFactorSet.save();
+
+  let market = loadMarket(event.params.market);
+  market.adjustFactor = adjustFactorSet.adjustFactor;
+  market.save();
 }
 
 export function handleLiquidationIncentiveSet(event: LiquidationIncentiveSetEvent): void {
@@ -71,4 +80,8 @@ export function handlePriceFeedSet(event: PriceFeedSetEvent): void {
   priceFeedSet.timestamp = event.block.timestamp.toU32();
   priceFeedSet.block = event.block.number.toU32();
   priceFeedSet.save();
+
+  let market = loadMarket(event.params.market);
+  market.priceFeed = priceFeedSet.priceFeed;
+  market.save();
 }

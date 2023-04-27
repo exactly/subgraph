@@ -46,7 +46,7 @@ dataSources:
     source:
       address: '{{ address }}'
       startBlock: {{ startBlock }}
-      abi: {{ name }}
+      abi: MarketWETH
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -72,9 +72,11 @@ dataSources:
         - FloatingDebtUpdate
         - Account
         - FixedPosition
+        - MaxFuturePoolsSet
+        - PenaltyRateSet
+        - ReserveFactorSet
+        - BackupFeeRateSet
       abis:
-        - name: {{ name }}
-          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
         - name: MarketWETH
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/MarketWETH.json
         - name: InterestRateModel
@@ -120,5 +122,14 @@ dataSources:
           handler: handleAccumulatorAccrual
         - event: FloatingDebtUpdate(uint256,uint256)
           handler: handleFloatingDebtUpdate
+        - event: MaxFuturePoolsSet(uint256)
+          handler: handleMaxFuturePoolsSet
+        - event: PenaltyRateSet(uint256)
+          handler: handlePenaltyRateSet
+        - event: ReserveFactorSet(uint256)
+          handler: handleReserveFactorSet
+        - event: BackupFeeRateSet(uint256)
+          handler: handleBackupFeeRateSet
+        # TODO: add RewardsControllerSet after contract is deployed
       file: src/Market.ts
 {{/ Market }}

@@ -1,41 +1,60 @@
-import { Address } from '@graphprotocol/graph-ts';
-import { InterestRateModel } from '../generated/MarketWETH/InterestRateModel';
+import { Address } from "@graphprotocol/graph-ts";
+import { InterestRateModel } from "../generated/MarketWETH/InterestRateModel";
 import {
-  Deposit as DepositEvent,
-  Withdraw as WithdrawEvent,
-  Borrow as BorrowEvent,
-  Repay as RepayEvent,
-  Transfer as TransferEvent,
-
-  DepositAtMaturity as DepositAtMaturityEvent,
-  WithdrawAtMaturity as WithdrawAtMaturityEvent,
-  BorrowAtMaturity as BorrowAtMaturityEvent,
-  RepayAtMaturity as RepayAtMaturityEvent,
-
-  Liquidate as LiquidateEvent,
-  Seize as SeizeEvent,
-
-  EarningsAccumulatorSmoothFactorSet as EarningsAccumulatorSmoothFactorSetEvent,
-  InterestRateModelSet as InterestRateModelSetEvent,
-  TreasurySet as TreasurySetEvent,
-
-  MarketUpdate as MarketUpdateEvent,
-  FixedEarningsUpdate as FixedEarningsUpdateEvent,
   AccumulatorAccrual as AccumulatorAccrualEvent,
+  BackupFeeRateSet as BackupFeeRateSetEvent,
+  BorrowAtMaturity as BorrowAtMaturityEvent,
+  Borrow as BorrowEvent,
+  DepositAtMaturity as DepositAtMaturityEvent,
+  Deposit as DepositEvent,
+  EarningsAccumulatorSmoothFactorSet as EarningsAccumulatorSmoothFactorSetEvent,
+  FixedEarningsUpdate as FixedEarningsUpdateEvent,
   FloatingDebtUpdate as FloatingDebtUpdateEvent,
-} from '../generated/MarketWETH/MarketWETH';
+  InterestRateModelSet as InterestRateModelSetEvent,
+  Liquidate as LiquidateEvent,
+  MarketUpdate as MarketUpdateEvent,
+  MarketWETH,
+  MaxFuturePoolsSet as MaxFuturePoolsSetEvent,
+  PenaltyRateSet as PenaltyRateSetEvent,
+  RepayAtMaturity as RepayAtMaturityEvent,
+  Repay as RepayEvent,
+  ReserveFactorSet as ReserveFactorSetEvent,
+  Seize as SeizeEvent,
+  Transfer as TransferEvent,
+  TreasurySet as TreasurySetEvent,
+  WithdrawAtMaturity as WithdrawAtMaturityEvent,
+  Withdraw as WithdrawEvent,
+} from "../generated/MarketWETH/MarketWETH";
+
 import {
-  Deposit, Withdraw, Borrow, Repay, Transfer,
-  DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
-  Liquidate, Seize,
-  EarningsAccumulatorSmoothFactorSet, InterestRateModelSet, TreasurySet,
-  MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
-} from '../generated/schema';
-import toId from './utils/toId';
-import loadFixedPosition from './utils/loadFixedPosition';
-import loadAccount from './utils/loadAccount';
-import loadMarket from './utils/loadMarket';
-import loadFixedPool from './utils/loadFixedPool';
+  AccumulatorAccrual,
+  BackupFeeRateSet,
+  Borrow,
+  BorrowAtMaturity,
+  Deposit,
+  DepositAtMaturity,
+  EarningsAccumulatorSmoothFactorSet,
+  FixedEarningsUpdate,
+  FloatingDebtUpdate,
+  InterestRateModelSet,
+  Liquidate,
+  MarketUpdate,
+  MaxFuturePoolsSet,
+  PenaltyRateSet,
+  Repay,
+  RepayAtMaturity,
+  ReserveFactorSet,
+  Seize,
+  Transfer,
+  TreasurySet,
+  Withdraw,
+  WithdrawAtMaturity,
+} from "../generated/schema";
+import loadAccount from "./utils/loadAccount";
+import loadFixedPool from "./utils/loadFixedPool";
+import loadFixedPosition from "./utils/loadFixedPosition";
+import loadMarket from "./utils/loadMarket";
+import toId from "./utils/toId";
 
 export function handleDeposit(event: DepositEvent): void {
   let entity = new Deposit(toId(event));
@@ -46,6 +65,10 @@ export function handleDeposit(event: DepositEvent): void {
   entity.assets = event.params.assets;
   entity.shares = event.params.shares;
   entity.save();
+
+  const market = loadMarket(entity.market);
+  market.totalAssets = market.totalAssets.plus(entity.assets);
+  market.save();
 }
 
 export function handleWithdraw(event: WithdrawEvent): void {
@@ -58,6 +81,10 @@ export function handleWithdraw(event: WithdrawEvent): void {
   entity.assets = event.params.assets;
   entity.shares = event.params.shares;
   entity.save();
+
+  const market = loadMarket(entity.market);
+  market.totalAssets = market.totalAssets.minus(entity.assets);
+  market.save();
 }
 
 export function handleBorrow(event: BorrowEvent): void {
@@ -74,6 +101,15 @@ export function handleBorrow(event: BorrowEvent): void {
   let account = loadAccount(entity.borrower, entity.market);
   account.borrowShares = account.borrowShares.plus(entity.shares);
   account.save();
+
+  const market = loadMarket(entity.market);
+  market.totalFloatingBorrowAssets = market.totalFloatingBorrowAssets.plus(
+    entity.assets,
+  );
+  market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.plus(
+    entity.shares,
+  );
+  market.save();
 }
 
 export function handleRepay(event: RepayEvent): void {
@@ -87,8 +123,17 @@ export function handleRepay(event: RepayEvent): void {
   entity.save();
 
   let account = loadAccount(entity.borrower, entity.market);
-  account.borrowShares = (account.borrowShares).minus(entity.shares);
+  account.borrowShares = account.borrowShares.minus(entity.shares);
   account.save();
+
+  const market = loadMarket(entity.market);
+  market.totalFloatingBorrowAssets = market.totalFloatingBorrowAssets.minus(
+    entity.assets,
+  );
+  market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.minus(
+    entity.shares,
+  );
+  market.save();
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -99,17 +144,25 @@ export function handleTransfer(event: TransferEvent): void {
   entity.to = event.params.to;
   entity.shares = event.params.amount;
   entity.save();
+  const market = loadMarket(entity.market);
 
-  if (entity.to.notEqual(Address.zero())) {
+  if (entity.from.equals(Address.zero())) {
+    market.totalSupply = market.totalSupply.plus(entity.shares);
+  } else {
+    const accountFrom = loadAccount(entity.from, entity.market);
+    accountFrom.depositShares = accountFrom.depositShares.minus(entity.shares);
+    accountFrom.save();
+  }
+
+  if (entity.to.equals(Address.zero())) {
+    market.totalSupply = market.totalSupply.minus(entity.shares);
+  } else {
     let accountTo = loadAccount(entity.to, entity.market);
     accountTo.depositShares = accountTo.depositShares.plus(entity.shares);
     accountTo.save();
   }
-  if (entity.from.notEqual(Address.zero())) {
-    let accountFrom = loadAccount(entity.from, entity.market);
-    accountFrom.depositShares = (accountFrom.depositShares).minus(entity.shares);
-    accountFrom.save();
-  }
+
+  market.save();
 }
 
 export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
@@ -123,7 +176,10 @@ export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
   entity.fee = event.params.fee;
   entity.save();
 
-  let position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
+  const position = loadFixedPosition(
+    loadAccount(entity.owner, entity.market),
+    entity.maturity,
+  );
   position.amount = position.amount.plus(entity.assets.plus(entity.fee));
   position.save();
 }
@@ -140,7 +196,10 @@ export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
   entity.assets = event.params.assets;
   entity.save();
 
-  let position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
+  const position = loadFixedPosition(
+    loadAccount(entity.owner, entity.market),
+    entity.maturity,
+  );
   position.amount = position.amount.minus(entity.positionAssets);
   position.save();
 }
@@ -224,7 +283,9 @@ export function handleEarningsAccumulatorSmoothFactorSet(
   market.save();
 }
 
-export function handleInterestRateModelSet(event: InterestRateModelSetEvent): void {
+export function handleInterestRateModelSet(
+  event: InterestRateModelSetEvent,
+): void {
   let entity = new InterestRateModelSet(toId(event));
   entity.market = event.address;
   entity.timestamp = event.block.timestamp.toU32();
@@ -290,11 +351,20 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   market.floatingBorrowShares = entity.floatingBorrowShares;
   market.floatingDebt = entity.floatingDebt;
   market.earningsAccumulator = entity.earningsAccumulator;
-  market.decimals = MarketWETH.bind(Address.fromBytes(entity.market)).decimals();
+
+  const instance = MarketWETH.bind(Address.fromBytes(entity.market));
+  market.decimals = instance.decimals();
+  market.symbol = instance.symbol();
+
+  const asset = MarketWETH.bind(instance.asset());
+  market.assetSymbol = asset.symbol();
+  market.asset = instance.asset();
   market.save();
 }
 
-export function handleFixedEarningsUpdate(event: FixedEarningsUpdateEvent): void {
+export function handleFixedEarningsUpdate(
+  event: FixedEarningsUpdateEvent,
+): void {
   let entity = new FixedEarningsUpdate(toId(event));
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toU32();
@@ -333,5 +403,65 @@ export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
   market.block = event.block.number.toU32();
   market.floatingUtilization = entity.utilization;
   market.lastFloatingDebtUpdate = entity.timestamp;
+  market.save();
+}
+
+export function handleMaxFuturePoolsSet(event: MaxFuturePoolsSetEvent): void {
+  const entity = new MaxFuturePoolsSet(toId(event));
+  entity.market = event.address;
+  entity.block = event.block.number.toU32();
+  entity.maxFuturePools = event.params.maxFuturePools.toI32();
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.save();
+
+  const market = loadMarket(entity.market);
+  market.maxFuturePools = entity.maxFuturePools;
+  market.block = event.block.number.toU32();
+  market.timestamp = entity.timestamp;
+  market.save();
+}
+
+export function handlePenaltyRateSet(event: PenaltyRateSetEvent): void {
+  const entity = new PenaltyRateSet(toId(event));
+  entity.market = event.address;
+  entity.block = event.block.number.toU32();
+  entity.penaltyRate = event.params.penaltyRate;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.save();
+
+  const market = loadMarket(entity.market);
+  market.penaltyRate = entity.penaltyRate;
+  market.block = event.block.number.toU32();
+  market.timestamp = entity.timestamp;
+  market.save();
+}
+
+export function handleReserveFactorSet(event: ReserveFactorSetEvent): void {
+  const entity = new ReserveFactorSet(toId(event));
+  entity.market = event.address;
+  entity.block = event.block.number.toU32();
+  entity.reserveFactor = event.params.reserveFactor;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.save();
+
+  const market = loadMarket(entity.market);
+  market.reserveFactor = entity.reserveFactor;
+  market.block = event.block.number.toU32();
+  market.timestamp = entity.timestamp;
+  market.save();
+}
+
+export function handleBackupFeeRateSet(event: BackupFeeRateSetEvent): void {
+  const entity = new BackupFeeRateSet(toId(event));
+  entity.market = event.address;
+  entity.block = event.block.number.toU32();
+  entity.backupFeeRate = event.params.backupFeeRate;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.save();
+
+  const market = loadMarket(entity.market);
+  market.backupFeeRate = entity.backupFeeRate;
+  market.block = event.block.number.toU32();
+  market.timestamp = entity.timestamp;
   market.save();
 }

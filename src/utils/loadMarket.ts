@@ -1,4 +1,4 @@
-import { Bytes } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { Market } from '../../generated/schema';
 
 export default function loadMarket(market: Bytes): Market {
@@ -8,5 +8,9 @@ export default function loadMarket(market: Bytes): Market {
 
   entity = new Market(id);
   entity.address = market;
+  entity.totalAssets = BigInt.zero();
+  entity.totalSupply = BigInt.zero();
+  entity.totalFloatingBorrowAssets = BigInt.zero();
+  entity.totalFloatingBorrowShares = BigInt.zero();
   return entity;
 }
