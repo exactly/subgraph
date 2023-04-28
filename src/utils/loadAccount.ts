@@ -2,7 +2,7 @@ import { BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { Account } from '../../generated/schema';
 
 export default function loadAccount(address: Bytes, market: Bytes): Account {
-  let id = `${address.toHexString()}-${market.toHexString()}`;
+  const id = `${address.toHexString()}-${market.toHexString()}`;
   let account = Account.load(id);
   if (account) return account;
 
