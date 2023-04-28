@@ -2,7 +2,7 @@ import { BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { Market } from '../../generated/schema';
 
 export default function loadMarket(market: Bytes): Market {
-  let id = market.toHexString();
+  const id = market.toHexString();
   let entity = Market.load(id);
   if (entity) return entity;
 
