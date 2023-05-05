@@ -45,6 +45,7 @@ import loadFixedPool from './utils/loadFixedPool';
 import loadFixedPosition from './utils/loadFixedPosition';
 import loadMarket from './utils/loadMarket';
 import toId from './utils/toId';
+import { updateMarketState } from './utils/updateMarketState';
 
 export function handleDeposit(event: DepositEvent): void {
   const entity = new Deposit(toId(event));
@@ -91,6 +92,8 @@ export function handleBorrow(event: BorrowEvent): void {
   market.timestamp = entity.timestamp;
   market.block = event.block.number.toU32();
   market.save();
+
+  updateMarketState(event, market);
 }
 
 export function handleRepay(event: RepayEvent): void {
@@ -114,6 +117,8 @@ export function handleRepay(event: RepayEvent): void {
   market.timestamp = entity.timestamp;
   market.block = event.block.number.toU32();
   market.save();
+
+  updateMarketState(event, market);
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -144,6 +149,8 @@ export function handleTransfer(event: TransferEvent): void {
   market.timestamp = entity.timestamp;
   market.block = event.block.number.toU32();
   market.save();
+
+  updateMarketState(event, market);
 }
 
 export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
@@ -278,6 +285,8 @@ export function handleEarningsAccumulatorSmoothFactorSet(
   market.block = event.block.number.toU32();
   market.earningsAccumulatorSmoothFactor = entity.earningsAccumulatorSmoothFactor;
   market.save();
+
+  updateMarketState(event, market);
 }
 
 export function handleInterestRateModelSet(event: InterestRateModelSetEvent): void {
@@ -308,6 +317,8 @@ export function handleInterestRateModelSet(event: InterestRateModelSetEvent): vo
   market.floatingCurveB = entity.floatingCurveB;
   market.floatingMaxUtilization = entity.floatingMaxUtilization;
   market.save();
+
+  updateMarketState(event, market);
 }
 
 export function handleTreasurySet(event: TreasurySetEvent): void {
@@ -324,6 +335,8 @@ export function handleTreasurySet(event: TreasurySetEvent): void {
   market.treasury = entity.treasury;
   market.treasuryFeeRate = entity.treasuryFeeRate;
   market.save();
+
+  updateMarketState(event, market);
 }
 
 export function handleMarketUpdate(event: MarketUpdateEvent): void {
@@ -348,6 +361,8 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   market.earningsAccumulator = entity.earningsAccumulator;
   market.symbol = Market.bind(Address.fromBytes(entity.market)).symbol();
   market.save();
+
+  updateMarketState(event, market);
 }
 
 export function handleFixedEarningsUpdate(event: FixedEarningsUpdateEvent): void {
@@ -375,6 +390,7 @@ export function handleAccumulatorAccrual(event: AccumulatorAccrualEvent): void {
   market.block = event.block.number.toU32();
   market.lastAccumulatorAccrual = entity.timestamp;
   market.save();
+  updateMarketState(event, market);
 }
 
 export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
@@ -390,6 +406,7 @@ export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
   market.floatingUtilization = entity.utilization;
   market.lastFloatingDebtUpdate = entity.timestamp;
   market.save();
+  updateMarketState(event, market);
 }
 
 export function handleMaxFuturePoolsSet(event: MaxFuturePoolsSetEvent): void {
@@ -405,6 +422,7 @@ export function handleMaxFuturePoolsSet(event: MaxFuturePoolsSetEvent): void {
   market.block = event.block.number.toU32();
   market.timestamp = entity.timestamp;
   market.save();
+  updateMarketState(event, market);
 }
 
 export function handlePenaltyRateSet(event: PenaltyRateSetEvent): void {
@@ -420,6 +438,7 @@ export function handlePenaltyRateSet(event: PenaltyRateSetEvent): void {
   market.block = event.block.number.toU32();
   market.timestamp = entity.timestamp;
   market.save();
+  updateMarketState(event, market);
 }
 
 export function handleReserveFactorSet(event: ReserveFactorSetEvent): void {
@@ -435,6 +454,7 @@ export function handleReserveFactorSet(event: ReserveFactorSetEvent): void {
   market.block = event.block.number.toU32();
   market.timestamp = entity.timestamp;
   market.save();
+  updateMarketState(event, market);
 }
 
 export function handleBackupFeeRateSet(event: BackupFeeRateSetEvent): void {
@@ -450,4 +470,5 @@ export function handleBackupFeeRateSet(event: BackupFeeRateSetEvent): void {
   market.block = event.block.number.toU32();
   market.timestamp = entity.timestamp;
   market.save();
+  updateMarketState(event, market);
 }

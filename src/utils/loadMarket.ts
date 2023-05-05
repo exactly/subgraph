@@ -10,5 +10,6 @@ export default function loadMarket(market: Bytes): Market {
   entity.address = market;
   entity.totalSupply = BigInt.zero();
   entity.totalFloatingBorrowShares = BigInt.zero();
+  entity.lastAccumulatorAccrual = 0;
   return entity;
 }
