@@ -21,6 +21,7 @@ dataSources:
         - AdjustFactorSet
         - LiquidationIncentiveSet
         - PriceFeedSet
+        - MarketState
       abis:
         - name: Auditor
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/Auditor.json
@@ -80,6 +81,7 @@ dataSources:
         - PenaltyRateSet
         - ReserveFactorSet
         - BackupFeeRateSet
+        - MarketState
       abis:
         - name: Market
           file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/MarketWETH.json
