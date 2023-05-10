@@ -88,6 +88,8 @@ export function handleBorrow(event: BorrowEvent): void {
   market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.plus(
     entity.shares,
   );
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
   market.save();
 }
 
@@ -109,6 +111,8 @@ export function handleRepay(event: RepayEvent): void {
   market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.minus(
     entity.shares,
   );
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
   market.save();
 }
 
@@ -137,7 +141,8 @@ export function handleTransfer(event: TransferEvent): void {
     accountTo.depositShares = accountTo.depositShares.plus(entity.shares);
     accountTo.save();
   }
-
+  market.timestamp = entity.timestamp;
+  market.block = event.block.number.toU32();
   market.save();
 }
 
@@ -341,9 +346,7 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   market.floatingBorrowShares = entity.floatingBorrowShares;
   market.floatingDebt = entity.floatingDebt;
   market.earningsAccumulator = entity.earningsAccumulator;
-
-  const instance = Market.bind(Address.fromBytes(entity.market));
-  market.symbol = instance.symbol();
+  market.symbol = Market.bind(Address.fromBytes(entity.market)).symbol();
   market.save();
 }
 

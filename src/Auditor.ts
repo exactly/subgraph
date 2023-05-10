@@ -27,11 +27,11 @@ export function handleMarketListed(event: MarketListedEvent): void {
 
   const instance = Market.bind(Address.fromString(market.id));
   market.decimals = instance.decimals();
-
-  const asset = ERC20.bind(instance.asset());
-  market.asset = instance.asset();
-  market.assetSymbol = asset.symbol();
-
+  const asset = instance.asset();
+  market.asset = asset;
+  market.assetSymbol = ERC20.bind(asset).symbol();
+  market.timestamp = marketList.timestamp;
+  market.block = marketList.block;
   market.save();
 }
 
@@ -71,6 +71,8 @@ export function handleAdjustFactorSet(event: AdjustFactorSetEvent): void {
 
   const market = loadMarket(event.params.market);
   market.adjustFactor = adjustFactorSet.adjustFactor;
+  market.timestamp = adjustFactorSet.timestamp;
+  market.block = adjustFactorSet.block;
   market.save();
 }
 
@@ -93,5 +95,7 @@ export function handlePriceFeedSet(event: PriceFeedSetEvent): void {
 
   const market = loadMarket(event.params.market);
   market.priceFeed = priceFeedSet.priceFeed;
+  market.timestamp = priceFeedSet.timestamp;
+  market.block = priceFeedSet.block;
   market.save();
 }
