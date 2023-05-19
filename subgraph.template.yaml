@@ -87,6 +87,8 @@ dataSources:
           file: node_modules/@exactly/protocol/deployments/{{ network }}/MarketWETH.json
         - name: InterestRateModel
           file: node_modules/@exactly/protocol/deployments/{{ network }}/InterestRateModelWETH.json
+        - name: ERC20
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/WETH.json
       eventHandlers:
         - event: Deposit(indexed address,indexed address,uint256,uint256)
           handler: handleDeposit

@@ -249,50 +249,48 @@ type Market @entity {
   # global
   timestamp: Int!
   block: Int!
-  # MarketUpdate
-  lastMarketUpdate: Int
-  floatingDepositShares: BigInt
-  floatingAssets: BigInt
-  floatingBorrowShares: BigInt
-  floatingDebt: BigInt
-  earningsAccumulator: BigInt
-  decimals: Int
+  decimals: Int!
   priceFeed: Bytes
   adjustFactor: BigInt
-  assetSymbol: String
-  symbol: String
-  asset: Bytes
-  # FloatingDebtUpdate
-  floatingUtilization: BigInt
-  lastFloatingDebtUpdate: Int
-  # InterestRateModelSet
-  interestRateModel: Bytes
-  fixedCurveA: BigInt
-  fixedCurveB: BigInt
-  fixedMaxUtilization: BigInt
-  floatingCurveA: BigInt
-  floatingCurveB: BigInt
-  floatingMaxUtilization: BigInt
-  # AccumulatorAccrual
-  lastAccumulatorAccrual: Int
-  # EarningsAccumulatorSmoothFactorSet
-  earningsAccumulatorSmoothFactor: BigInt
-  # TreasurySet
-  treasury: Bytes
-  treasuryFeeRate: BigInt
-  # FixedEarningsUpdate
-  fixedPools: [FixedPool!] @derivedFrom(field: "market")
-  # MaxFuturePoolsSet
-  maxFuturePools: Int
-  # BackupFeeRateSet
-  backupFeeRate: BigInt
-  # ReserveFactorSet
-  reserveFactor: BigInt
-  # PenaltyRateSet
-  penaltyRate: BigInt
-  # Borrow
+  assetSymbol: String!
+  symbol: String!
+  asset: Bytes!
   totalSupply: BigInt!
   totalFloatingBorrowShares: BigInt!
+  # MarketUpdate
+  lastMarketUpdate: Int
+  floatingAssets: BigInt!
+  floatingDebt: BigInt!
+  earningsAccumulator: BigInt!
+  # FloatingDebtUpdate
+  floatingUtilization: BigInt
+  lastFloatingDebtUpdate: Int!
+  # InterestRateModelSet
+  interestRateModel: Bytes!
+  fixedCurveA: BigInt!
+  fixedCurveB: BigInt!
+  fixedMaxUtilization: BigInt!
+  floatingCurveA: BigInt!
+  floatingCurveB: BigInt!
+  floatingMaxUtilization: BigInt!
+  # AccumulatorAccrual
+  lastAccumulatorAccrual: Int!
+  # EarningsAccumulatorSmoothFactorSet
+  earningsAccumulatorSmoothFactor: BigInt!
+  # TreasurySet
+  treasury: Bytes!
+  treasuryFeeRate: BigInt!
+  # FixedEarningsUpdate
+  fixedPools: [FixedPool!]! @derivedFrom(field: "market")
+  # MaxFuturePoolsSet
+  maxFuturePools: Int!
+  # BackupFeeRateSet
+  backupFeeRate: BigInt!
+  # ReserveFactorSet
+  reserveFactor: BigInt!
+  # PenaltyRateSet
+  penaltyRate: BigInt!
+  # Borrow
 }
 
 type FixedPool @entity {
@@ -301,17 +299,6 @@ type FixedPool @entity {
   maturity: Int!
   timestamp: Int!
   unassignedEarnings: BigInt!
-}
-
-type FixedPoolState @entity {
-  id: ID!
-  marketState: MarketState!
-  maturity: Int!
-  timestamp: Int!
-  unassignedEarnings: BigInt!
-  borrowed: BigInt!
-  supplied: BigInt!
-  lastAccrual: BigInt!
 }
 
 type MaxFuturePoolsSet @entity {
@@ -350,9 +337,9 @@ type MarketState @entity {
   id: ID!
   market: Market!
   timestamp: Int!
-  floatingDepositShares: BigInt
   floatingAssets: BigInt
-  floatingBorrowShares: BigInt
+  totalFloatingBorrowShares: BigInt
+  totalSupply: BigInt!
   floatingDebt: BigInt
   earningsAccumulator: BigInt
   floatingUtilization: BigInt
@@ -363,5 +350,16 @@ type MarketState @entity {
   earningsAccumulatorSmoothFactor: BigInt
   treasuryFeeRate: BigInt
   fixedPools: [FixedPoolState!] @derivedFrom(field: "marketState")
-  totalSupply: BigInt!
+  lastFloatingDebtUpdate: Int!
+}
+
+type FixedPoolState @entity {
+  id: ID!
+  marketState: MarketState!
+  maturity: Int!
+  timestamp: Int!
+  unassignedEarnings: BigInt!
+  borrowed: BigInt!
+  supplied: BigInt!
+  lastAccrual: Int!
 }
