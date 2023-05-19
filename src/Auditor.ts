@@ -14,7 +14,7 @@ import loadAccount from './utils/loadAccount';
 import loadMarket from './utils/loadMarket';
 import { Market } from '../generated/Auditor/Market';
 import { ERC20 } from '../generated/Auditor/ERC20';
-import { updateMarketState } from './utils/updateMarketState';
+import addMarketState from './utils/addMarketState';
 
 export function handleMarketListed(event: MarketListedEvent): void {
   const marketList = new MarketList(event.transaction.hash.toHex());
@@ -24,17 +24,15 @@ export function handleMarketListed(event: MarketListedEvent): void {
   marketList.block = event.block.number.toU32();
   marketList.save();
 
-  const market = loadMarket(marketList.market);
+  const market = loadMarket(marketList.market, event);
 
   const instance = Market.bind(Address.fromString(market.id));
   market.decimals = instance.decimals();
   const asset = instance.asset();
   market.asset = asset;
   market.assetSymbol = ERC20.bind(asset).symbol();
-  market.timestamp = marketList.timestamp;
-  market.block = marketList.block;
   market.save();
-  updateMarketState(event, market);
+  addMarketState(event, market);
 }
 
 export function handleMarketEntered(event: MarketEnteredEvent): void {
@@ -71,12 +69,10 @@ export function handleAdjustFactorSet(event: AdjustFactorSetEvent): void {
   adjustFactorSet.block = event.block.number.toU32();
   adjustFactorSet.save();
 
-  const market = loadMarket(event.params.market);
+  const market = loadMarket(event.params.market, event);
   market.adjustFactor = adjustFactorSet.adjustFactor;
-  market.timestamp = adjustFactorSet.timestamp;
-  market.block = adjustFactorSet.block;
   market.save();
-  updateMarketState(event, market);
+  addMarketState(event, market);
 }
 
 export function handleLiquidationIncentiveSet(event: LiquidationIncentiveSetEvent): void {
@@ -96,10 +92,8 @@ export function handlePriceFeedSet(event: PriceFeedSetEvent): void {
   priceFeedSet.block = event.block.number.toU32();
   priceFeedSet.save();
 
-  const market = loadMarket(event.params.market);
+  const market = loadMarket(event.params.market, event);
   market.priceFeed = priceFeedSet.priceFeed;
-  market.timestamp = priceFeedSet.timestamp;
-  market.block = priceFeedSet.block;
   market.save();
-  updateMarketState(event, market);
+  addMarketState(event, market);
 }
