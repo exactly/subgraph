@@ -25,12 +25,12 @@ export default function saveMarketState(event: ethereum.Event, market: Market): 
   marketState.lastFloatingDebtUpdate = market.lastFloatingDebtUpdate;
 
   const contract = MarketContract.bind(Address.fromString(market.id));
-  const timestamp = event.block.timestamp.toI32();
+  const timestamp = event.block.timestamp.toU32();
   const maxFuturePools = contract.maxFuturePools();
   const minMaturity = timestamp - (timestamp % INTERVAL) + INTERVAL;
 
   for (let i = 0; i < maxFuturePools; ++i) {
-    const fixedPoolInstance = contract.fixedPools(BigInt.fromI32(minMaturity + INTERVAL * i));
+    const fixedPoolInstance = contract.fixedPools(BigInt.fromU32(minMaturity + INTERVAL * i));
     const fixedPoolState = new FixedPoolState(`${toId(event)}-${i}`);
     fixedPoolState.unassignedEarnings = fixedPoolInstance.getUnassignedEarnings();
     fixedPoolState.borrowed = fixedPoolInstance.getBorrowed();

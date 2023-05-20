@@ -393,7 +393,7 @@ export function handleMaxFuturePoolsSet(event: MaxFuturePoolsSetEvent): void {
   const entity = new MaxFuturePoolsSet(toId(event));
   entity.market = event.address;
   entity.block = event.block.number.toU32();
-  entity.maxFuturePools = event.params.maxFuturePools.toI32();
+  entity.maxFuturePools = event.params.maxFuturePools.toU32();
   entity.timestamp = event.block.timestamp.toU32();
   entity.save();
 
