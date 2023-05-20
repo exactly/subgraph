@@ -3,5 +3,5 @@
     "target": "esnext",
     "allowJs": true
   },
-  "include": ["views/**/*.*js", "**/.eslintrc.*js"]
+  "include": ["views/**/*.*js", "**/.eslintrc.*js", ".changeset/**/*"]
 }

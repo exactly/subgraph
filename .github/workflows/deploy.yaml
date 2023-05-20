@@ -10,14 +10,14 @@ jobs:
         with:
           node-version: 18
           cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
 
-      - run: npm install
-      - run: npm run auth ${{ secrets.GRAPH_ACCESS_TOKEN }}
-              
-      - run: |
-          npm run prepare:goerli
-          npm run deploy exactly-protocol/exactly-goerli
-      
-      - run: |
-          npm run prepare:mainnet
-          npm run deploy exactly-protocol/exactly
+      - run: npx graph auth --product hosted-service ${{ secrets.GRAPH_HOSTED_TOKEN }}
+      - run: npm run prepare:optimism
+      - run: npx graph deploy --product hosted-service exactly/optimism
+
+      - run: npx graph auth --studio ${{ secrets.GRAPH_STUDIO_TOKEN }}
+      - run: npm run prepare:mainnet
+      - run: npx graph deploy --studio -l {{ github.ref_name }} exactly

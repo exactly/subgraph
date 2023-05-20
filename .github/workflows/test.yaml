@@ -1,6 +1,4 @@
 on:
-  push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
 jobs:
@@ -16,3 +14,6 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+      - run: npx graph auth --product hosted-service ${{ secrets.GRAPH_HOSTED_TOKEN }}
+      - run: npm run prepare:goerli
+      - run: npx graph deploy --product hosted-service exactly/goerli      
