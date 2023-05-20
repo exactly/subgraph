@@ -20,10 +20,10 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@exactly/protocol": "^0.2.10",
     "@graphprotocol/graph-ts": "^0.30.0"
   },
   "devDependencies": {
-    "@exactly/protocol": "^0.2.10",
     "@graphprotocol/graph-cli": "^0.49.0",
     "@types/mustache": "^4.2.2",
     "@types/node": "^20.2.1",
