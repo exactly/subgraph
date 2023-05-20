@@ -4,7 +4,7 @@ const { readdirSync, readFileSync } = require('fs');
 const { NETWORK: network } = process.env;
 if (!network) throw new Error('network not set');
 
-const dir = `node_modules/@exactly-protocol/protocol/deployments/${network}/`;
+const dir = `node_modules/@exactly/protocol/deployments/${network}/`;
 const deployments = readdirSync(dir).filter((file) => extname(file) === '.json');
 
 /** @type {function(string): Deployment} */

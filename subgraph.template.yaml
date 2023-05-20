@@ -35,9 +35,9 @@ dataSources:
         - FloatingDebtUpdate
       abis:
         - name: {{ name }}
-          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/{{ name }}.json
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/{{ name }}.json
         - name: InterestRateModel
-          file: node_modules/@exactly-protocol/protocol/deployments/{{ network }}/InterestRateModelWETH.json
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/InterestRateModelWETH.json
       eventHandlers:
         - event: Deposit(indexed address,indexed address,uint256,uint256)
           handler: handleDeposit
