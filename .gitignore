@@ -8,3 +8,4 @@ Thumbs.db
 subgraph.yaml
 .*-version*
 *.log
+*.tgz
