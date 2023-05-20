@@ -1,11 +1,11 @@
 import {
   Address, BigInt, Bytes, ethereum,
 } from '@graphprotocol/graph-ts';
-import { Market } from '../../generated/schema';
 
-import { Market as MarketABI } from '../../generated/MarketWETH/Market';
+import { Market } from '../../generated/schema';
 import { ERC20 } from '../../generated/Auditor/ERC20';
-import { InterestRateModel } from '../../generated/MarketWETH/InterestRateModel';
+import { Market as MarketContract } from '../../generated/Auditor/Market';
+import { InterestRateModel } from '../../generated/Auditor/InterestRateModel';
 
 export default function loadMarket(market: Bytes, event: ethereum.Event): Market {
   const id = market.toHexString();
@@ -17,7 +17,7 @@ export default function loadMarket(market: Bytes, event: ethereum.Event): Market
   entity.timestamp = event.block.timestamp.toU32();
   entity.block = event.block.number.toU32();
 
-  const mkt = MarketABI.bind(Address.fromBytes(market));
+  const mkt = MarketContract.bind(Address.fromBytes(market));
   entity.totalSupply = mkt.totalSupply();
   entity.totalFloatingBorrowShares = mkt.totalFloatingBorrowShares();
   entity.lastAccumulatorAccrual = mkt.lastAccumulatorAccrual().toU32();

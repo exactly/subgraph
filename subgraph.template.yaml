@@ -25,10 +25,12 @@ dataSources:
       abis:
         - name: Auditor
           file: node_modules/@exactly/protocol/deployments/{{ network }}/Auditor.json
-        - name: Market
-          file: node_modules/@exactly/protocol/deployments/{{ network }}/MarketWETH.json
         - name: ERC20
           file: node_modules/@exactly/protocol/deployments/{{ network }}/WETH.json
+        - name: Market
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/MarketWETH.json
+        - name: InterestRateModel
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/InterestRateModelWETH.json
       eventHandlers:
         - event: MarketListed(indexed address,uint8)
           handler: handleMarketListed
@@ -83,12 +85,12 @@ dataSources:
         - BackupFeeRateSet
         - MarketState
       abis:
+        - name: ERC20
+          file: node_modules/@exactly/protocol/deployments/optimism/WETH.json
         - name: Market
-          file: node_modules/@exactly/protocol/deployments/{{ network }}/MarketWETH.json
+          file: node_modules/@exactly/protocol/deployments/optimism/MarketWETH.json
         - name: InterestRateModel
           file: node_modules/@exactly/protocol/deployments/{{ network }}/InterestRateModelWETH.json
-        - name: ERC20
-          file: node_modules/@exactly/protocol/deployments/{{ network }}/WETH.json
       eventHandlers:
         - event: Deposit(indexed address,indexed address,uint256,uint256)
           handler: handleDeposit

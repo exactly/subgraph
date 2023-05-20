@@ -1,5 +1,4 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { InterestRateModel } from '../generated/MarketWETH/InterestRateModel';
 import {
   Deposit as DepositEvent,
   Withdraw as WithdrawEvent,
@@ -29,8 +28,8 @@ import {
   ReserveFactorSet as ReserveFactorSetEvent,
   BackupFeeRateSet as BackupFeeRateSetEvent,
   Market,
-} from '../generated/MarketWETH/Market';
-
+} from '../generated/Auditor/Market';
+import { InterestRateModel as InterestRateModelContract } from '../generated/Auditor/InterestRateModel';
 import {
   Deposit, Withdraw, Borrow, Repay, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
@@ -287,7 +286,7 @@ export function handleInterestRateModelSet(event: InterestRateModelSetEvent): vo
   entity.timestamp = event.block.timestamp.toU32();
   entity.interestRateModel = event.params.interestRateModel;
 
-  const irm = InterestRateModel.bind(event.params.interestRateModel);
+  const irm = InterestRateModelContract.bind(event.params.interestRateModel);
   entity.fixedCurveA = irm.fixedCurveA();
   entity.fixedCurveB = irm.fixedCurveB();
   entity.fixedMaxUtilization = irm.fixedMaxUtilization();

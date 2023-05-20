@@ -10,10 +10,10 @@ import {
 import {
   MarketExit, MarketEnter, MarketList, AdjustFactorSet, LiquidationIncentiveSet, PriceFeedSet,
 } from '../generated/schema';
-import loadAccount from './utils/loadAccount';
+import { ERC20 as ERC20Contract } from '../generated/Auditor/ERC20';
+import { Market as MarketContract } from '../generated/Auditor/Market';
 import loadMarket from './utils/loadMarket';
-import { Market } from '../generated/Auditor/Market';
-import { ERC20 } from '../generated/Auditor/ERC20';
+import loadAccount from './utils/loadAccount';
 import saveMarketState from './utils/saveMarketState';
 
 export function handleMarketListed(event: MarketListedEvent): void {
@@ -26,11 +26,11 @@ export function handleMarketListed(event: MarketListedEvent): void {
 
   const market = loadMarket(marketList.market, event);
 
-  const instance = Market.bind(Address.fromString(market.id));
-  market.decimals = instance.decimals();
-  const asset = instance.asset();
+  const contract = MarketContract.bind(Address.fromString(market.id));
+  market.decimals = contract.decimals();
+  const asset = contract.asset();
   market.asset = asset;
-  market.assetSymbol = ERC20.bind(asset).symbol();
+  market.assetSymbol = ERC20Contract.bind(asset).symbol();
   market.save();
   saveMarketState(event, market);
 }
