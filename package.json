@@ -17,7 +17,7 @@
     "postinstall": "run-s prepare:goerli codegen || cd ."
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "dependencies": {
     "@graphprotocol/graph-ts": "^0.30.0"
