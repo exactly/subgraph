@@ -45,7 +45,7 @@ import loadFixedPool from './utils/loadFixedPool';
 import loadFixedPosition from './utils/loadFixedPosition';
 import loadMarket from './utils/loadMarket';
 import toId from './utils/toId';
-import addMarketState from './utils/addMarketState';
+import saveMarketState from './utils/saveMarketState';
 
 export function handleDeposit(event: DepositEvent): void {
   const entity = new Deposit(toId(event));
@@ -91,7 +91,7 @@ export function handleBorrow(event: BorrowEvent): void {
   );
   market.save();
 
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleRepay(event: RepayEvent): void {
@@ -114,7 +114,7 @@ export function handleRepay(event: RepayEvent): void {
   );
   market.save();
 
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -144,7 +144,7 @@ export function handleTransfer(event: TransferEvent): void {
   }
   market.save();
 
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
@@ -278,7 +278,7 @@ export function handleEarningsAccumulatorSmoothFactorSet(
   market.earningsAccumulatorSmoothFactor = entity.earningsAccumulatorSmoothFactor;
   market.save();
 
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleInterestRateModelSet(event: InterestRateModelSetEvent): void {
@@ -307,7 +307,7 @@ export function handleInterestRateModelSet(event: InterestRateModelSetEvent): vo
   market.floatingMaxUtilization = entity.floatingMaxUtilization;
   market.save();
 
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleTreasurySet(event: TreasurySetEvent): void {
@@ -323,7 +323,7 @@ export function handleTreasurySet(event: TreasurySetEvent): void {
   market.treasuryFeeRate = entity.treasuryFeeRate;
   market.save();
 
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleMarketUpdate(event: MarketUpdateEvent): void {
@@ -347,7 +347,7 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   market.symbol = Market.bind(Address.fromBytes(entity.market)).symbol();
   market.save();
 
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleFixedEarningsUpdate(event: FixedEarningsUpdateEvent): void {
@@ -373,7 +373,7 @@ export function handleAccumulatorAccrual(event: AccumulatorAccrualEvent): void {
   const market = loadMarket(entity.market, event);
   market.lastAccumulatorAccrual = entity.timestamp;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
@@ -387,7 +387,7 @@ export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
   market.floatingUtilization = entity.utilization;
   market.lastFloatingDebtUpdate = entity.timestamp;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleMaxFuturePoolsSet(event: MaxFuturePoolsSetEvent): void {
@@ -401,7 +401,7 @@ export function handleMaxFuturePoolsSet(event: MaxFuturePoolsSetEvent): void {
   const market = loadMarket(entity.market, event);
   market.maxFuturePools = entity.maxFuturePools;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handlePenaltyRateSet(event: PenaltyRateSetEvent): void {
@@ -415,7 +415,7 @@ export function handlePenaltyRateSet(event: PenaltyRateSetEvent): void {
   const market = loadMarket(entity.market, event);
   market.penaltyRate = entity.penaltyRate;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleReserveFactorSet(event: ReserveFactorSetEvent): void {
@@ -429,7 +429,7 @@ export function handleReserveFactorSet(event: ReserveFactorSetEvent): void {
   const market = loadMarket(entity.market, event);
   market.reserveFactor = entity.reserveFactor;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleBackupFeeRateSet(event: BackupFeeRateSetEvent): void {
@@ -443,5 +443,5 @@ export function handleBackupFeeRateSet(event: BackupFeeRateSetEvent): void {
   const market = loadMarket(entity.market, event);
   market.backupFeeRate = entity.backupFeeRate;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }

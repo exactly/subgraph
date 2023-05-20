@@ -14,7 +14,7 @@ import loadAccount from './utils/loadAccount';
 import loadMarket from './utils/loadMarket';
 import { Market } from '../generated/Auditor/Market';
 import { ERC20 } from '../generated/Auditor/ERC20';
-import addMarketState from './utils/addMarketState';
+import saveMarketState from './utils/saveMarketState';
 
 export function handleMarketListed(event: MarketListedEvent): void {
   const marketList = new MarketList(event.transaction.hash.toHex());
@@ -32,7 +32,7 @@ export function handleMarketListed(event: MarketListedEvent): void {
   market.asset = asset;
   market.assetSymbol = ERC20.bind(asset).symbol();
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleMarketEntered(event: MarketEnteredEvent): void {
@@ -72,7 +72,7 @@ export function handleAdjustFactorSet(event: AdjustFactorSetEvent): void {
   const market = loadMarket(event.params.market, event);
   market.adjustFactor = adjustFactorSet.adjustFactor;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }
 
 export function handleLiquidationIncentiveSet(event: LiquidationIncentiveSetEvent): void {
@@ -95,5 +95,5 @@ export function handlePriceFeedSet(event: PriceFeedSetEvent): void {
   const market = loadMarket(event.params.market, event);
   market.priceFeed = priceFeedSet.priceFeed;
   market.save();
-  addMarketState(event, market);
+  saveMarketState(event, market);
 }

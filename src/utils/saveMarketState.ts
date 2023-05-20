@@ -5,7 +5,7 @@ import { Market as MarketContract } from '../../generated/MarketWETH/Market';
 
 const INTERVAL = 60 * 60 * 24 * 7 * 4;
 
-function addMarketState(event: ethereum.Event, market: Market): void {
+export default function saveMarketState(event: ethereum.Event, market: Market): void {
   const marketState = new MarketState(toId(event));
 
   marketState.market = market.id;
@@ -43,5 +43,3 @@ function addMarketState(event: ethereum.Event, market: Market): void {
   }
   marketState.save();
 }
-
-export default addMarketState;
