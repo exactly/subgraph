@@ -1,6 +1,6 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 
-const WAD = BigInt.fromString('1000000000000000000');
+const WAD = BigInt.fromU64(1_000_000_000_000_000_000);
 
 export default function fixedRate(
   assets: BigInt,
@@ -8,7 +8,6 @@ export default function fixedRate(
   timestamp: i32,
   maturity: i32,
 ): BigInt {
-  const rate = fee.times(WAD).div(assets);
-  const timeFactor = BigInt.fromI32(31536000).times(WAD).div(BigInt.fromI32(maturity - timestamp));
-  return rate.times(timeFactor).div(WAD);
+  return fee.times(WAD.times(BigInt.fromU32(31_536_000)))
+    .div(assets.times(BigInt.fromU32(maturity - timestamp)));
 }
