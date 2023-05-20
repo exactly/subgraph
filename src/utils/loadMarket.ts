@@ -50,7 +50,8 @@ export default function loadMarket(market: Bytes, event: ethereum.Event): Market
   entity.floatingCurveB = irm.floatingCurveB();
   entity.floatingMaxUtilization = irm.floatingMaxUtilization();
   entity.floatingUtilization = entity.floatingAssets > BigInt.zero()
-    ? entity.floatingDebt.div(entity.floatingAssets) : BigInt.zero();
+    ? entity.floatingDebt.div(entity.floatingAssets)
+    : BigInt.zero();
 
   return entity;
 }

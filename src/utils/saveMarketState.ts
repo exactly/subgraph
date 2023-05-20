@@ -3,7 +3,7 @@ import { FixedPoolState, Market, MarketState } from '../../generated/schema';
 import { Market as MarketContract } from '../../generated/Auditor/Market';
 import toId from './toId';
 
-const INTERVAL = 60 * 60 * 24 * 7 * 4;
+const INTERVAL = 4 * 7 * 86_400;
 
 export default function saveMarketState(event: ethereum.Event, market: Market): void {
   const marketState = new MarketState(toId(event));

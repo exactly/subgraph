@@ -85,9 +85,7 @@ export function handleBorrow(event: BorrowEvent): void {
   account.save();
 
   const market = loadMarket(entity.market, event);
-  market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.plus(
-    entity.shares,
-  );
+  market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.plus(entity.shares);
   market.save();
 
   saveMarketState(event, market);
@@ -108,9 +106,7 @@ export function handleRepay(event: RepayEvent): void {
   account.save();
 
   const market = loadMarket(entity.market, event);
-  market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.minus(
-    entity.shares,
-  );
+  market.totalFloatingBorrowShares = market.totalFloatingBorrowShares.minus(entity.shares);
   market.save();
 
   saveMarketState(event, market);
@@ -159,9 +155,11 @@ export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
 
   const position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
   const totalAmount = position.principal.plus(entity.assets);
-  position.rate = (position.principal.times(position.rate).plus(entity.assets
-    .times(fixedRate(entity.assets, entity.fee, entity.timestamp, entity.maturity)))
-  ).div(totalAmount);
+  position.rate = position.principal
+    .times(position.rate)
+    .plus(entity.assets
+      .times(fixedRate(entity.assets, entity.fee, entity.timestamp, entity.maturity)))
+    .div(totalAmount);
   position.principal = totalAmount;
   position.fee = position.fee.plus(entity.fee);
   position.save();
@@ -208,9 +206,11 @@ export function handleBorrowAtMaturity(event: BorrowAtMaturityEvent): void {
     true,
   );
   const totalAmount = position.principal.plus(entity.assets);
-  position.rate = (position.principal.times(position.rate).plus(entity.assets
-    .times(fixedRate(entity.assets, entity.fee, entity.timestamp, entity.maturity)))
-  ).div(totalAmount);
+  position.rate = position.principal
+    .times(position.rate)
+    .plus(entity.assets
+      .times(fixedRate(entity.assets, entity.fee, entity.timestamp, entity.maturity)))
+    .div(totalAmount);
   position.fee = position.fee.plus(entity.fee);
   position.principal = totalAmount;
   position.save();
