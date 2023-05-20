@@ -29,7 +29,7 @@ export default function saveMarketState(event: ethereum.Event, market: Market): 
   const maxFuturePools = instance.maxFuturePools();
   const minMaturity = timestamp - (timestamp % INTERVAL) + INTERVAL;
 
-  for (let i = 0; i < maxFuturePools; i += 1) {
+  for (let i = 0; i < maxFuturePools; ++i) {
     const fixedPoolInstance = instance.fixedPools(BigInt.fromI32(minMaturity + INTERVAL * i));
     const fixedPoolState = new FixedPoolState(`${toId(event)}-${i}`);
     fixedPoolState.unassignedEarnings = fixedPoolInstance.getUnassignedEarnings();

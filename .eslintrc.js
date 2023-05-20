@@ -7,6 +7,7 @@ module.exports = {
     'plugin:eslint-comments/recommended',
   ],
   rules: {
+    'no-plusplus': 'off',
     'prefer-const': 'off',
     'import/prefer-default-export': 'off',
     'eslint-comments/no-unused-disable': 'error',
