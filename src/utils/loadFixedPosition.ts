@@ -6,7 +6,7 @@ export default function loadFixedPosition(
   maturity: u32,
   borrow: boolean = false,
 ): FixedPosition {
-  const id = `${account.id}-${maturity}-${borrow ? 1 : 0}`;
+  const id = `${account.id}-${maturity}-${borrow ? 'borrow' : 'deposit'}`;
   let fixedPosition = FixedPosition.load(id);
   if (fixedPosition) return fixedPosition;
 
