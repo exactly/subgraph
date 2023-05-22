@@ -27,13 +27,14 @@ import {
   PenaltyRateSet as PenaltyRateSetEvent,
   ReserveFactorSet as ReserveFactorSetEvent,
   BackupFeeRateSet as BackupFeeRateSetEvent,
+  RewardsControllerSet as RewardsControllerSetEvent,
   Market,
 } from '../generated/Auditor/Market';
 import { InterestRateModel as InterestRateModelContract } from '../generated/Auditor/InterestRateModel';
 import {
   Deposit, Withdraw, Borrow, Repay, Transfer,
   DepositAtMaturity, WithdrawAtMaturity, BorrowAtMaturity, RepayAtMaturity,
-  Liquidate, Seize,
+  Liquidate, Seize, RewardsControllerSet,
   EarningsAccumulatorSmoothFactorSet, InterestRateModelSet, TreasurySet,
   MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
   MaxFuturePoolsSet, PenaltyRateSet, ReserveFactorSet, BackupFeeRateSet,
@@ -441,6 +442,20 @@ export function handleBackupFeeRateSet(event: BackupFeeRateSetEvent): void {
 
   const market = loadMarket(entity.market, event);
   market.backupFeeRate = entity.backupFeeRate;
+  market.save();
+  saveMarketState(event, market);
+}
+
+export function handleRewardsControllerSet(event: RewardsControllerSetEvent): void {
+  const entity = new RewardsControllerSet(toId(event));
+  entity.market = event.address;
+  entity.block = event.block.number.toU32();
+  entity.rewardsController = event.params.rewardsController;
+  entity.timestamp = event.block.timestamp.toU32();
+  entity.save();
+
+  const market = loadMarket(event.address, event);
+  market.rewardsController = event.params.rewardsController;
   market.save();
   saveMarketState(event, market);
 }

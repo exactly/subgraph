@@ -140,5 +140,7 @@ dataSources:
           handler: handleReserveFactorSet
         - event: BackupFeeRateSet(uint256)
           handler: handleBackupFeeRateSet
+        - event: RewardsControllerSet(indexed address)
+          handler: handleRewardsControllerSet
       file: src/Market.ts
 {{/ Market }}

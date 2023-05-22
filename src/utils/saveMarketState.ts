@@ -23,6 +23,7 @@ export default function saveMarketState(event: ethereum.Event, market: Market): 
   marketState.treasuryFeeRate = market.treasuryFeeRate;
   marketState.totalSupply = market.totalSupply;
   marketState.lastFloatingDebtUpdate = market.lastFloatingDebtUpdate;
+  marketState.rewardsController = market.rewardsController;
 
   const contract = MarketContract.bind(Address.fromString(market.id));
   const timestamp = event.block.timestamp.toU32();

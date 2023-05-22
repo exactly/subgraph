@@ -290,7 +290,8 @@ type Market @entity {
   reserveFactor: BigInt!
   # PenaltyRateSet
   penaltyRate: BigInt!
-  # Borrow
+  # RewardsControllerSet
+  rewardsController: Bytes
 }
 
 type FixedPool @entity {
@@ -304,32 +305,32 @@ type FixedPool @entity {
 type MaxFuturePoolsSet @entity {
   id: ID!
   market: Bytes!
-  timestamp: Int!
   maxFuturePools: Int!
+  timestamp: Int!
   block: Int!
 }
 
 type PenaltyRateSet @entity {
   id: ID!
   market: Bytes!
-  timestamp: Int!
   penaltyRate: BigInt!
+  timestamp: Int!
   block: Int!
 }
 
 type ReserveFactorSet @entity {
   id: ID!
   market: Bytes!
-  timestamp: Int!
   reserveFactor: BigInt!
+  timestamp: Int!
   block: Int!
 }
 
 type BackupFeeRateSet @entity {
   id: ID!
   market: Bytes!
-  timestamp: Int!
   backupFeeRate: BigInt!
+  timestamp: Int!
   block: Int!
 }
 
@@ -351,6 +352,7 @@ type MarketState @entity {
   treasuryFeeRate: BigInt
   fixedPools: [FixedPoolState!] @derivedFrom(field: "marketState")
   lastFloatingDebtUpdate: Int!
+  rewardsController: Bytes
 }
 
 type FixedPoolState @entity {
@@ -362,4 +364,12 @@ type FixedPoolState @entity {
   borrowed: BigInt!
   supplied: BigInt!
   lastAccrual: Int!
+}
+
+type RewardsControllerSet @entity {
+  id: ID!
+  market: Bytes!
+  rewardsController: Bytes!
+  timestamp: Int!
+  block: Int!
 }
