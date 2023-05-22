@@ -8,23 +8,24 @@ import {
   PriceFeedSet as PriceFeedSetEvent,
 } from '../generated/Auditor/Auditor';
 import {
-  MarketExit, MarketEnter, MarketList, AdjustFactorSet, LiquidationIncentiveSet, PriceFeedSet,
+  MarketExit, MarketEnter, MarketListed, AdjustFactorSet, LiquidationIncentiveSet, PriceFeedSet,
 } from '../generated/schema';
 import { ERC20 as ERC20Contract } from '../generated/Auditor/ERC20';
 import { Market as MarketContract } from '../generated/Auditor/Market';
-import loadMarket from './utils/loadMarket';
-import loadAccount from './utils/loadAccount';
 import saveMarketState from './utils/saveMarketState';
+import loadAccount from './utils/loadAccount';
+import loadMarket from './utils/loadMarket';
+import toId from './utils/toId';
 
 export function handleMarketListed(event: MarketListedEvent): void {
-  const marketList = new MarketList(event.transaction.hash.toHex());
-  marketList.market = event.params.market;
-  marketList.decimals = event.params.decimals;
-  marketList.timestamp = event.block.timestamp.toU32();
-  marketList.block = event.block.number.toU32();
-  marketList.save();
+  const marketListed = new MarketListed(toId(event));
+  marketListed.market = event.params.market;
+  marketListed.decimals = event.params.decimals;
+  marketListed.timestamp = event.block.timestamp.toU32();
+  marketListed.block = event.block.number.toU32();
+  marketListed.save();
 
-  const market = loadMarket(marketList.market, event);
+  const market = loadMarket(marketListed.market, event);
 
   const contract = MarketContract.bind(Address.fromString(market.id));
   market.decimals = contract.decimals();
@@ -40,7 +41,7 @@ export function handleMarketEntered(event: MarketEnteredEvent): void {
   account.isCollateral = true;
   account.save();
 
-  const marketEnter = new MarketEnter(event.transaction.hash.toHex());
+  const marketEnter = new MarketEnter(toId(event));
   marketEnter.account = event.params.account;
   marketEnter.market = event.params.market;
   marketEnter.timestamp = event.block.timestamp.toU32();
@@ -53,7 +54,7 @@ export function handleMarketExited(event: MarketExitedEvent): void {
   account.isCollateral = false;
   account.save();
 
-  const marketExit = new MarketExit(event.transaction.hash.toHex());
+  const marketExit = new MarketExit(toId(event));
   marketExit.account = event.params.account;
   marketExit.market = event.params.market;
   marketExit.timestamp = event.block.timestamp.toU32();
@@ -62,7 +63,7 @@ export function handleMarketExited(event: MarketExitedEvent): void {
 }
 
 export function handleAdjustFactorSet(event: AdjustFactorSetEvent): void {
-  const adjustFactorSet = new AdjustFactorSet(event.transaction.hash.toHex());
+  const adjustFactorSet = new AdjustFactorSet(toId(event));
   adjustFactorSet.market = event.params.market;
   adjustFactorSet.adjustFactor = event.params.adjustFactor;
   adjustFactorSet.timestamp = event.block.timestamp.toU32();
@@ -76,7 +77,7 @@ export function handleAdjustFactorSet(event: AdjustFactorSetEvent): void {
 }
 
 export function handleLiquidationIncentiveSet(event: LiquidationIncentiveSetEvent): void {
-  const liquidationIncentiveSet = new LiquidationIncentiveSet(event.transaction.hash.toHex());
+  const liquidationIncentiveSet = new LiquidationIncentiveSet(toId(event));
   liquidationIncentiveSet.liquidator = event.params.liquidationIncentive.liquidator;
   liquidationIncentiveSet.lenders = event.params.liquidationIncentive.lenders;
   liquidationIncentiveSet.timestamp = event.block.timestamp.toU32();
@@ -85,7 +86,7 @@ export function handleLiquidationIncentiveSet(event: LiquidationIncentiveSetEven
 }
 
 export function handlePriceFeedSet(event: PriceFeedSetEvent): void {
-  const priceFeedSet = new PriceFeedSet(event.transaction.hash.toHex());
+  const priceFeedSet = new PriceFeedSet(toId(event));
   priceFeedSet.market = event.params.market;
   priceFeedSet.priceFeed = event.params.priceFeed;
   priceFeedSet.timestamp = event.block.timestamp.toU32();

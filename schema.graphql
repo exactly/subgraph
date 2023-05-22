@@ -195,7 +195,7 @@ type FixedPosition @entity {
   rate: BigInt!
 }
 
-type MarketList @entity {
+type MarketListed @entity {
   id: ID!
   market: Bytes!
   decimals: Int!
