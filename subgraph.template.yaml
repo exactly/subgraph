@@ -16,8 +16,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - MarketListed
-        - MarketEnter
-        - MarketExit
+        - MarketEntered
+        - MarketExited
         - AdjustFactorSet
         - LiquidationIncentiveSet
         - PriceFeedSet

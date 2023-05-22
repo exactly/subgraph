@@ -203,7 +203,7 @@ type MarketListed @entity {
   block: Int!
 }
 
-type MarketEnter @entity {
+type MarketEntered @entity {
   id: ID!
   account: Bytes!
   market: Bytes!
@@ -211,7 +211,7 @@ type MarketEnter @entity {
   block: Int!
 }
 
-type MarketExit @entity {
+type MarketExited @entity {
   id: ID!
   account: Bytes!
   market: Bytes!

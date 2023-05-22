@@ -8,7 +8,7 @@ import {
   PriceFeedSet as PriceFeedSetEvent,
 } from '../generated/Auditor/Auditor';
 import {
-  MarketExit, MarketEnter, MarketListed, AdjustFactorSet, LiquidationIncentiveSet, PriceFeedSet,
+  MarketExited, MarketEntered, MarketListed, AdjustFactorSet, LiquidationIncentiveSet, PriceFeedSet,
 } from '../generated/schema';
 import { ERC20 as ERC20Contract } from '../generated/Auditor/ERC20';
 import { Market as MarketContract } from '../generated/Auditor/Market';
@@ -41,12 +41,12 @@ export function handleMarketEntered(event: MarketEnteredEvent): void {
   account.isCollateral = true;
   account.save();
 
-  const marketEnter = new MarketEnter(toId(event));
-  marketEnter.account = event.params.account;
-  marketEnter.market = event.params.market;
-  marketEnter.timestamp = event.block.timestamp.toU32();
-  marketEnter.block = event.block.number.toU32();
-  marketEnter.save();
+  const marketEntered = new MarketEntered(toId(event));
+  marketEntered.account = event.params.account;
+  marketEntered.market = event.params.market;
+  marketEntered.timestamp = event.block.timestamp.toU32();
+  marketEntered.block = event.block.number.toU32();
+  marketEntered.save();
 }
 
 export function handleMarketExited(event: MarketExitedEvent): void {
@@ -54,12 +54,12 @@ export function handleMarketExited(event: MarketExitedEvent): void {
   account.isCollateral = false;
   account.save();
 
-  const marketExit = new MarketExit(toId(event));
-  marketExit.account = event.params.account;
-  marketExit.market = event.params.market;
-  marketExit.timestamp = event.block.timestamp.toU32();
-  marketExit.block = event.block.number.toU32();
-  marketExit.save();
+  const marketExited = new MarketExited(toId(event));
+  marketExited.account = event.params.account;
+  marketExited.market = event.params.market;
+  marketExited.timestamp = event.block.timestamp.toU32();
+  marketExited.block = event.block.number.toU32();
+  marketExited.save();
 }
 
 export function handleAdjustFactorSet(event: AdjustFactorSetEvent): void {
