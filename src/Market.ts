@@ -39,13 +39,14 @@ import {
   MarketUpdate, FixedEarningsUpdate, AccumulatorAccrual, FloatingDebtUpdate,
   MaxFuturePoolsSet, PenaltyRateSet, ReserveFactorSet, BackupFeeRateSet,
 } from '../generated/schema';
-import fixedRate from './utils/fixedRate';
-import loadAccount from './utils/loadAccount';
-import loadFixedPool from './utils/loadFixedPool';
 import loadFixedPosition from './utils/loadFixedPosition';
-import loadMarket from './utils/loadMarket';
-import toId from './utils/toId';
 import saveMarketState from './utils/saveMarketState';
+import loadFixedPool from './utils/loadFixedPool';
+import savedAccount from './utils/savedAccount';
+import loadAccount from './utils/loadAccount';
+import loadMarket from './utils/loadMarket';
+import fixedRate from './utils/fixedRate';
+import toId from './utils/toId';
 
 export function handleDeposit(event: DepositEvent): void {
   const entity = new Deposit(toId(event));
@@ -154,7 +155,7 @@ export function handleDepositAtMaturity(event: DepositAtMaturityEvent): void {
   entity.fee = event.params.fee;
   entity.save();
 
-  const position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
+  const position = loadFixedPosition(savedAccount(entity.owner, entity.market), entity.maturity);
   const totalAmount = position.principal.plus(entity.assets);
   position.rate = position.principal
     .times(position.rate)
@@ -178,7 +179,7 @@ export function handleWithdrawAtMaturity(event: WithdrawAtMaturityEvent): void {
   entity.assets = event.params.assets;
   entity.save();
 
-  const position = loadFixedPosition(loadAccount(entity.owner, entity.market), entity.maturity);
+  const position = loadFixedPosition(savedAccount(entity.owner, entity.market), entity.maturity);
   const principal = entity.positionAssets.times(position.principal)
     .div(position.principal.plus(position.fee));
   const fee = entity.positionAssets.minus(principal);
@@ -202,7 +203,7 @@ export function handleBorrowAtMaturity(event: BorrowAtMaturityEvent): void {
   entity.save();
 
   const position = loadFixedPosition(
-    loadAccount(entity.borrower, entity.market),
+    savedAccount(entity.borrower, entity.market),
     entity.maturity,
     true,
   );
@@ -229,7 +230,7 @@ export function handleRepayAtMaturity(event: RepayAtMaturityEvent): void {
   entity.save();
 
   const position = loadFixedPosition(
-    loadAccount(entity.borrower, entity.market),
+    savedAccount(entity.borrower, entity.market),
     entity.maturity,
     true,
   );
