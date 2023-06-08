@@ -144,3 +144,28 @@ dataSources:
           handler: handleRewardsControllerSet
       file: src/Market.ts
 {{/ Market }}
+{{# RewardsController }}
+  - kind: ethereum/contract
+    name: RewardsController
+    network: {{ network }}
+    source:
+      address: '{{ address }}'
+      startBlock: {{ startBlock }}
+      abi: RewardsController
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - IndexUpdate
+        - DistributionSet
+      abis:
+        - name: RewardsController
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/RewardsController.json
+      eventHandlers:
+        - event: IndexUpdate(indexed address,indexed address,uint256,uint256,uint256,uint256)
+          handler: handleIndexUpdate
+        - event:  DistributionSet(indexed address,indexed address,(address,address,address,uint32,uint256,uint256,uint256,uint256,int128,uint64,uint64,uint64,uint64,uint64))
+          handler: handleDistributionSet
+      file: src/RewardsController.ts
+{{/ RewardsController }}
