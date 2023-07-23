@@ -411,3 +411,18 @@ type IndexUpdate @entity {
   newUndistributed: BigInt!
   timestamp: Int!
 }
+
+type RewardsClaim @entity {
+  id: ID!
+  account: Bytes!
+  reward: Bytes!
+  to: Bytes!
+  amount: BigInt!
+}
+
+type AccountClaim @entity {
+  id: ID! # account-reward
+  account: Bytes!
+  reward: Bytes!
+  amount: BigInt!
+}

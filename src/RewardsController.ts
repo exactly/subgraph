@@ -1,8 +1,12 @@
 import {
   DistributionSet as DistributionSetEvent,
   IndexUpdate as IndexUpdateEvent,
+  Claim as ClaimEvent,
 } from '../generated/RewardsController/RewardsController';
-import { Config, DistributionSet, IndexUpdate } from '../generated/schema';
+import {
+  Config, DistributionSet, IndexUpdate, RewardsClaim,
+} from '../generated/schema';
+import loadAccountClaim from './utils/loadAccountClaim';
 import toId from './utils/toId';
 
 export function handleIndexUpdate(event: IndexUpdateEvent): void {
@@ -42,4 +46,17 @@ export function handleDistributionSet(event: DistributionSetEvent): void {
   config.save();
 
   distributionSet.save();
+}
+
+export function handleRewardsClaim(event: ClaimEvent): void {
+  const claim = new RewardsClaim(toId(event));
+  claim.account = event.params.account;
+  claim.amount = event.params.amount;
+  claim.to = event.params.to;
+  claim.reward = event.params.reward;
+  claim.save();
+
+  const accountClaim = loadAccountClaim(event.params.account, event.params.reward);
+  accountClaim.amount = accountClaim.amount.plus(event.params.amount);
+  accountClaim.save();
 }

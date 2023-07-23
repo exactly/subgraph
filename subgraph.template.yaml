@@ -157,12 +157,15 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
+        - Claim
         - IndexUpdate
         - DistributionSet
       abis:
         - name: RewardsController
           file: node_modules/@exactly/protocol/deployments/{{ network }}/RewardsController.json
       eventHandlers:
+        - event: Claim(indexed address,indexed address,indexed address,uint256)
+          handler: handleRewardsClaim
         - event: IndexUpdate(indexed address,indexed address,uint256,uint256,uint256,uint256)
           handler: handleIndexUpdate
         - event:  DistributionSet(indexed address,indexed address,(address,address,address,uint32,uint256,uint256,uint256,uint256,int128,uint64,uint64,uint64,uint64,uint64))
