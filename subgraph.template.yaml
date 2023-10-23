@@ -172,3 +172,34 @@ dataSources:
           handler: handleDistributionSet
       file: src/RewardsController.ts
 {{/ RewardsController }}
+{{# TimelockController }}
+  - kind: ethereum/contract
+    name: TimelockController
+    network: {{ network }}
+    source:
+      address: '{{ address }}'
+      startBlock: {{ startBlock }}
+      abi: TimelockController
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CallScheduled
+        - CallExecuted
+        - Cancelled
+        - MinDelayChange
+      abis:
+        - name: TimelockController
+          file: node_modules/@exactly/protocol/deployments/{{ network }}/TimelockController.json
+      eventHandlers:
+        - event: CallScheduled(indexed bytes32,indexed uint256,address,uint256,bytes,bytes32,uint256)
+          handler: handleCallScheduled
+        - event: CallExecuted(indexed bytes32,indexed uint256,address,uint256,bytes)
+          handler: handleCallExecuted
+        - event: Cancelled(indexed bytes32)
+          handler: handleCancelled
+        - event:  MinDelayChange(uint256,uint256)
+          handler: handleMinDelayChange
+      file: src/TimelockController.ts
+{{/ TimelockController }}

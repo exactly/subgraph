@@ -26,6 +26,7 @@ module.exports = {
 
     return from(deployment, name);
   }).filter(Boolean),
+  TimelockController: from(get('TimelockController'), 'TimelockController'),
 };
 
 /** @typedef {{ address: string, receipt?: { blockNumber: number }, args?: any[] }} Deployment */

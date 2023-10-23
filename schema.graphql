@@ -426,3 +426,34 @@ type AccountClaim @entity {
   reward: Bytes!
   amount: BigInt!
 }
+
+type TimelockControllerOperation @entity {
+  id: ID!
+  call: TimelockControllerCall!
+  index: Int!
+  target: Bytes!
+  value: BigInt!
+  data: Bytes!
+}
+
+type TimelockControllerCall @entity {
+  id: ID!
+  operations: [TimelockControllerOperation!] @derivedFrom(field: "call")
+  predecessor: Bytes
+  delay: Int!
+  scheduler: Bytes!
+  scheduledAt: Int!
+  canceller: Bytes
+  cancelledAt: Int
+  executor: Bytes
+  executedAt: Int
+}
+
+type TimelockControllerMinDelaySet @entity {
+  id: ID!
+  oldDuration: Int!
+  newDuration: Int!
+  caller: Bytes!
+  block: Int!
+  timestamp: Int!
+}
