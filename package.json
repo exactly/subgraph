@@ -21,7 +21,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@exactly/protocol": "^0.2.10",
+    "@exactly/protocol": "^0.2.17",
     "@graphprotocol/graph-ts": "^0.30.0"
   },
   "devDependencies": {
