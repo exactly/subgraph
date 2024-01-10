@@ -46,6 +46,7 @@ import savedAccount from './utils/savedAccount';
 import loadAccount from './utils/loadAccount';
 import loadMarket from './utils/loadMarket';
 import fixedRate from './utils/fixedRate';
+import orZero from './utils/orZero';
 import toId from './utils/toId';
 
 export function handleDeposit(event: DepositEvent): void {
@@ -289,23 +290,45 @@ export function handleInterestRateModelSet(event: InterestRateModelSetEvent): vo
   entity.interestRateModel = event.params.interestRateModel;
 
   const irm = InterestRateModelContract.bind(event.params.interestRateModel);
-  entity.fixedCurveA = irm.fixedCurveA();
-  entity.fixedCurveB = irm.fixedCurveB();
-  entity.fixedMaxUtilization = irm.fixedMaxUtilization();
-  entity.floatingCurveA = irm.floatingCurveA();
-  entity.floatingCurveB = irm.floatingCurveB();
-  entity.floatingMaxUtilization = irm.floatingMaxUtilization();
+  entity.floatingCurveA = orZero(irm.try_floatingCurveA());
+  entity.floatingCurveB = orZero(irm.try_floatingCurveB());
+  entity.floatingMaxUtilization = orZero(irm.try_floatingMaxUtilization());
+  entity.minRate = irm.try_parameters().reverted ? BigInt.zero() : irm.parameters().minRate;
+  entity.naturalRate = irm.try_parameters().reverted ? BigInt.zero() : irm.parameters().naturalRate;
+  entity.naturalUtilization = orZero(irm.try_naturalUtilization());
+  entity.sigmoidSpeed = orZero(irm.try_sigmoidSpeed());
+  entity.growthSpeed = orZero(irm.try_growthSpeed());
+  entity.maxRate = orZero(irm.try_maxRate());
+  entity.spreadFactor = orZero(irm.try_spreadFactor());
+  entity.timePreference = orZero(irm.try_timePreference());
+  entity.fixedAllocation = orZero(irm.try_fixedAllocation());
+  entity.maturitySpeed = orZero(irm.try_maturitySpeed());
+
+  entity.fixedCurveA = orZero(irm.try_fixedCurveA());
+  entity.fixedCurveB = orZero(irm.try_fixedCurveB());
+  entity.fixedMaxUtilization = orZero(irm.try_fixedMaxUtilization());
 
   entity.save();
 
   const market = loadMarket(entity.market, event);
   market.interestRateModel = entity.interestRateModel;
-  market.fixedCurveA = entity.fixedCurveA;
-  market.fixedCurveB = entity.fixedCurveB;
-  market.fixedMaxUtilization = entity.fixedMaxUtilization;
   market.floatingCurveA = entity.floatingCurveA;
   market.floatingCurveB = entity.floatingCurveB;
   market.floatingMaxUtilization = entity.floatingMaxUtilization;
+
+  market.naturalUtilization = entity.naturalUtilization;
+  market.sigmoidSpeed = entity.sigmoidSpeed;
+  market.growthSpeed = entity.growthSpeed;
+  market.maxRate = entity.maxRate;
+  market.spreadFactor = entity.spreadFactor;
+  market.timePreference = entity.timePreference;
+  market.fixedAllocation = entity.fixedAllocation;
+  market.maturitySpeed = entity.maturitySpeed;
+
+  market.fixedCurveA = entity.fixedCurveA;
+  market.fixedCurveB = entity.fixedCurveB;
+  market.fixedMaxUtilization = entity.fixedMaxUtilization;
+
   market.save();
 
   saveMarketState(event, market);
@@ -328,6 +351,8 @@ export function handleTreasurySet(event: TreasurySetEvent): void {
 }
 
 export function handleMarketUpdate(event: MarketUpdateEvent): void {
+  const contract = Market.bind(event.address);
+
   const entity = new MarketUpdate(toId(event));
   entity.market = event.address;
   entity.timestamp = event.params.timestamp.toU32();
@@ -336,6 +361,7 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   entity.floatingBorrowShares = event.params.floatingBorrowShares;
   entity.floatingDebt = event.params.floatingDebt;
   entity.earningsAccumulator = event.params.earningsAccumulator;
+  entity.floatingBackupBorrowed = contract.floatingBackupBorrowed();
   entity.save();
 
   const market = loadMarket(entity.market, event);
@@ -344,8 +370,9 @@ export function handleMarketUpdate(event: MarketUpdateEvent): void {
   market.floatingAssets = entity.floatingAssets;
   market.totalFloatingBorrowShares = entity.floatingBorrowShares;
   market.floatingDebt = entity.floatingDebt;
+  market.floatingBackupBorrowed = entity.floatingBackupBorrowed;
   market.earningsAccumulator = entity.earningsAccumulator;
-  market.symbol = Market.bind(Address.fromBytes(entity.market)).symbol();
+  market.symbol = contract.symbol();
   market.save();
 
   saveMarketState(event, market);

@@ -6,6 +6,7 @@ import { Market } from '../../generated/schema';
 import { ERC20 } from '../../generated/Auditor/ERC20';
 import { Market as MarketContract } from '../../generated/Auditor/Market';
 import { InterestRateModel } from '../../generated/Auditor/InterestRateModel';
+import orZero from './orZero';
 
 export default function loadMarket(market: Bytes, event: ethereum.Event): Market {
   const id = market.toHexString();
@@ -23,6 +24,7 @@ export default function loadMarket(market: Bytes, event: ethereum.Event): Market
   entity.lastAccumulatorAccrual = mkt.lastAccumulatorAccrual().toU32();
   entity.floatingAssets = mkt.floatingAssets();
   entity.floatingDebt = mkt.floatingDebt();
+  entity.floatingBackupBorrowed = mkt.floatingBackupBorrowed();
   entity.earningsAccumulator = mkt.earningsAccumulator();
   entity.decimals = mkt.decimals();
   entity.symbol = mkt.symbol();
@@ -39,21 +41,29 @@ export default function loadMarket(market: Bytes, event: ethereum.Event): Market
   entity.penaltyRate = mkt.penaltyRate();
   entity.totalFloatingBorrowShares = mkt.totalFloatingBorrowShares();
 
+  entity.floatingUtilization = entity.floatingAssets > BigInt.zero()
+    ? entity.floatingDebt.div(entity.floatingAssets)
+    : BigInt.zero();
+
   const asset = ERC20.bind(mkt.asset());
   entity.assetSymbol = asset.symbol();
 
-  if (mkt.interestRateModel() !== Address.zero()) {
-    const irm = InterestRateModel.bind(mkt.interestRateModel());
-    entity.fixedCurveA = irm.fixedCurveA();
-    entity.fixedCurveB = irm.fixedCurveB();
-    entity.fixedMaxUtilization = irm.fixedMaxUtilization();
-    entity.floatingCurveA = irm.floatingCurveA();
-    entity.floatingCurveB = irm.floatingCurveB();
-    entity.floatingMaxUtilization = irm.floatingMaxUtilization();
-    entity.floatingUtilization = entity.floatingAssets > BigInt.zero()
-      ? entity.floatingDebt.div(entity.floatingAssets)
-      : BigInt.zero();
-  }
+  const irm = InterestRateModel.bind(mkt.interestRateModel());
+  entity.fixedCurveA = orZero(irm.try_fixedCurveA());
+  entity.fixedCurveB = orZero(irm.try_fixedCurveB());
+  entity.fixedMaxUtilization = orZero(irm.try_fixedMaxUtilization());
+  entity.floatingCurveA = orZero(irm.try_floatingCurveA());
+  entity.floatingCurveB = orZero(irm.try_floatingCurveB());
+  entity.floatingMaxUtilization = orZero(irm.try_floatingMaxUtilization());
+
+  entity.naturalUtilization = orZero(irm.try_naturalUtilization());
+  entity.sigmoidSpeed = orZero(irm.try_sigmoidSpeed());
+  entity.growthSpeed = orZero(irm.try_growthSpeed());
+  entity.maxRate = orZero(irm.try_maxRate());
+  entity.spreadFactor = orZero(irm.try_spreadFactor());
+  entity.timePreference = orZero(irm.try_timePreference());
+  entity.fixedAllocation = orZero(irm.try_fixedAllocation());
+  entity.maturitySpeed = orZero(irm.try_maturitySpeed());
 
   return entity;
 }

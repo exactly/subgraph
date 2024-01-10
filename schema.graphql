@@ -138,6 +138,7 @@ type MarketUpdate @entity {
   floatingAssets: BigInt!
   floatingBorrowShares: BigInt!
   floatingDebt: BigInt!
+  floatingBackupBorrowed: BigInt!
   earningsAccumulator: BigInt!
 }
 
@@ -167,12 +168,22 @@ type InterestRateModelSet @entity {
   market: Bytes!
   timestamp: Int!
   interestRateModel: Bytes!
-  fixedCurveA: BigInt!
-  fixedCurveB: BigInt!
-  fixedMaxUtilization: BigInt!
   floatingCurveA: BigInt!
   floatingCurveB: BigInt!
   floatingMaxUtilization: BigInt!
+  minRate: BigInt!
+  naturalRate: BigInt!
+  naturalUtilization: BigInt!
+  sigmoidSpeed: BigInt!
+  growthSpeed: BigInt!
+  maxRate: BigInt!
+  spreadFactor: BigInt!
+  timePreference: BigInt!
+  fixedAllocation: BigInt!
+  maturitySpeed: BigInt!
+  fixedCurveA: BigInt!
+  fixedCurveB: BigInt!
+  fixedMaxUtilization: BigInt!
 }
 
 type Account @entity {
@@ -261,18 +272,27 @@ type Market @entity {
   lastMarketUpdate: Int
   floatingAssets: BigInt!
   floatingDebt: BigInt!
+  floatingBackupBorrowed: BigInt!
   earningsAccumulator: BigInt!
   # FloatingDebtUpdate
   floatingUtilization: BigInt
   lastFloatingDebtUpdate: Int!
   # InterestRateModelSet
   interestRateModel: Bytes!
-  fixedCurveA: BigInt!
-  fixedCurveB: BigInt!
-  fixedMaxUtilization: BigInt!
   floatingCurveA: BigInt!
   floatingCurveB: BigInt!
   floatingMaxUtilization: BigInt!
+  naturalUtilization: BigInt!
+  sigmoidSpeed: BigInt!
+  growthSpeed: BigInt!
+  maxRate: BigInt!
+  spreadFactor: BigInt!
+  timePreference: BigInt!
+  fixedAllocation: BigInt!
+  maturitySpeed: BigInt!
+  fixedCurveA: BigInt!
+  fixedCurveB: BigInt!
+  fixedMaxUtilization: BigInt!
   # AccumulatorAccrual
   lastAccumulatorAccrual: Int!
   # EarningsAccumulatorSmoothFactorSet
@@ -370,11 +390,23 @@ type MarketState @entity {
   totalFloatingBorrowShares: BigInt
   totalSupply: BigInt!
   floatingDebt: BigInt
+  floatingBackupBorrowed: BigInt
   earningsAccumulator: BigInt
   floatingUtilization: BigInt
   floatingCurveA: BigInt
   floatingCurveB: BigInt
   floatingMaxUtilization: BigInt
+  naturalUtilization: BigInt!
+  sigmoidSpeed: BigInt!
+  growthSpeed: BigInt!
+  maxRate: BigInt!
+  spreadFactor: BigInt!
+  timePreference: BigInt!
+  fixedAllocation: BigInt!
+  maturitySpeed: BigInt!
+  fixedCurveA: BigInt!
+  fixedCurveB: BigInt!
+  fixedMaxUtilization: BigInt!
   lastAccumulatorAccrual: Int!
   earningsAccumulatorSmoothFactor: BigInt
   treasuryFeeRate: BigInt
