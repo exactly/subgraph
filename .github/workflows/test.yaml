@@ -15,5 +15,5 @@ jobs:
       - run: npm run lint
       - run: npm run build
       - run: npx graph auth --product hosted-service ${{ secrets.GRAPH_HOSTED_TOKEN }}
-      - run: npm run prepare:goerli
-      - run: npx graph deploy --product hosted-service exactly/goerli      
+      - run: npm run prepare:op-sepolia
+      - run: npx graph deploy --product hosted-service exactly/op-sepolia

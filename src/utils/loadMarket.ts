@@ -42,16 +42,18 @@ export default function loadMarket(market: Bytes, event: ethereum.Event): Market
   const asset = ERC20.bind(mkt.asset());
   entity.assetSymbol = asset.symbol();
 
-  const irm = InterestRateModel.bind(mkt.interestRateModel());
-  entity.fixedCurveA = irm.fixedCurveA();
-  entity.fixedCurveB = irm.fixedCurveB();
-  entity.fixedMaxUtilization = irm.fixedMaxUtilization();
-  entity.floatingCurveA = irm.floatingCurveA();
-  entity.floatingCurveB = irm.floatingCurveB();
-  entity.floatingMaxUtilization = irm.floatingMaxUtilization();
-  entity.floatingUtilization = entity.floatingAssets > BigInt.zero()
-    ? entity.floatingDebt.div(entity.floatingAssets)
-    : BigInt.zero();
+  if (mkt.interestRateModel() !== Address.zero()) {
+    const irm = InterestRateModel.bind(mkt.interestRateModel());
+    entity.fixedCurveA = irm.fixedCurveA();
+    entity.fixedCurveB = irm.fixedCurveB();
+    entity.fixedMaxUtilization = irm.fixedMaxUtilization();
+    entity.floatingCurveA = irm.floatingCurveA();
+    entity.floatingCurveB = irm.floatingCurveB();
+    entity.floatingMaxUtilization = irm.floatingMaxUtilization();
+    entity.floatingUtilization = entity.floatingAssets > BigInt.zero()
+      ? entity.floatingDebt.div(entity.floatingAssets)
+      : BigInt.zero();
+  }
 
   return entity;
 }

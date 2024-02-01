@@ -16,6 +16,7 @@ const from = ({ address, receipt }, name) => ({ name, address, startBlock: recei
 module.exports = {
   graphNetwork: {
     ethereum: 'mainnet',
+    'op-sepolia': 'optimism-sepolia',
   }[network] ?? network,
   network,
   Auditor: from(get('Auditor'), 'Auditor'),

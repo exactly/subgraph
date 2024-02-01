@@ -14,15 +14,15 @@
     "version": "changeset version && npm install --package-lock-only && git commit --all --amend --no-edit",
     "prepare:ethereum": "cross-env NETWORK=ethereum mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "prepare:optimism": "cross-env NETWORK=optimism mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
-    "prepare:goerli": "cross-env NETWORK=goerli mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
-    "postinstall": "run-s prepare:goerli codegen"
+    "prepare:op-sepolia": "cross-env NETWORK=op-sepolia mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
+    "postinstall": "run-s prepare:op-sepolia codegen"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
-    "@exactly/protocol": "^0.2.19",
-    "@graphprotocol/graph-ts": "^0.32.0"
+    "@exactly/protocol": "exactly/protocol#op-sepolia",
+    "@graphprotocol/graph-ts": "^0.31.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
