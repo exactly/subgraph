@@ -14,6 +14,9 @@ const get = (name) => JSON.parse(readFileSync(join(dir, `${name}.json`)));
 const from = ({ address, receipt }, name) => ({ name, address, startBlock: receipt?.blockNumber });
 
 module.exports = {
+  graphNetwork: {
+    ethereum: 'mainnet',
+  }[network] ?? network,
   network,
   Auditor: from(get('Auditor'), 'Auditor'),
   RewardsController: existsSync(join(dir, 'RewardsController.json')) ? from(get('RewardsController'), 'RewardsController') : undefined,
