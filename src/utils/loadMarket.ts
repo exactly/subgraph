@@ -41,10 +41,6 @@ export default function loadMarket(market: Bytes, event: ethereum.Event): Market
   entity.penaltyRate = mkt.penaltyRate();
   entity.totalFloatingBorrowShares = mkt.totalFloatingBorrowShares();
 
-  entity.floatingUtilization = entity.floatingAssets > BigInt.zero()
-    ? entity.floatingDebt.div(entity.floatingAssets)
-    : BigInt.zero();
-
   const asset = ERC20.bind(mkt.asset());
   entity.assetSymbol = asset.symbol();
 

@@ -15,7 +15,6 @@ export default function saveMarketState(event: ethereum.Event, market: Market): 
   marketState.floatingDebt = market.floatingDebt;
   marketState.floatingBackupBorrowed = market.floatingBackupBorrowed;
   marketState.earningsAccumulator = market.earningsAccumulator;
-  marketState.floatingUtilization = market.floatingUtilization;
   marketState.floatingCurveA = market.floatingCurveA;
   marketState.floatingCurveB = market.floatingCurveB;
   marketState.floatingMaxUtilization = market.floatingMaxUtilization;

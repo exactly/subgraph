@@ -412,7 +412,6 @@ export function handleFloatingDebtUpdate(event: FloatingDebtUpdateEvent): void {
   entity.save();
 
   const market = loadMarket(entity.market, event);
-  market.floatingUtilization = entity.utilization;
   market.lastFloatingDebtUpdate = entity.timestamp;
   market.save();
   saveMarketState(event, market);

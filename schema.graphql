@@ -275,7 +275,6 @@ type Market @entity {
   floatingBackupBorrowed: BigInt!
   earningsAccumulator: BigInt!
   # FloatingDebtUpdate
-  floatingUtilization: BigInt
   lastFloatingDebtUpdate: Int!
   # InterestRateModelSet
   interestRateModel: Bytes!
@@ -392,7 +391,6 @@ type MarketState @entity {
   floatingDebt: BigInt
   floatingBackupBorrowed: BigInt
   earningsAccumulator: BigInt
-  floatingUtilization: BigInt
   floatingCurveA: BigInt
   floatingCurveB: BigInt
   floatingMaxUtilization: BigInt
