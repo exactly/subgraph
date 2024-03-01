@@ -289,24 +289,28 @@ export function handleInterestRateModelSet(event: InterestRateModelSetEvent): vo
   entity.timestamp = event.block.timestamp.toU32();
   entity.interestRateModel = event.params.interestRateModel;
 
-  const irm = InterestRateModelContract.bind(event.params.interestRateModel);
-  entity.floatingCurveA = orZero(irm.try_floatingCurveA());
-  entity.floatingCurveB = orZero(irm.try_floatingCurveB());
-  entity.floatingMaxUtilization = orZero(irm.try_floatingMaxUtilization());
-  entity.minRate = irm.try_parameters().reverted ? BigInt.zero() : irm.parameters().minRate;
-  entity.naturalRate = irm.try_parameters().reverted ? BigInt.zero() : irm.parameters().naturalRate;
-  entity.naturalUtilization = orZero(irm.try_naturalUtilization());
-  entity.sigmoidSpeed = orZero(irm.try_sigmoidSpeed());
-  entity.growthSpeed = orZero(irm.try_growthSpeed());
-  entity.maxRate = orZero(irm.try_maxRate());
-  entity.spreadFactor = orZero(irm.try_spreadFactor());
-  entity.timePreference = orZero(irm.try_timePreference());
-  entity.fixedAllocation = orZero(irm.try_fixedAllocation());
-  entity.maturitySpeed = orZero(irm.try_maturitySpeed());
-
-  entity.fixedCurveA = orZero(irm.try_fixedCurveA());
-  entity.fixedCurveB = orZero(irm.try_fixedCurveB());
-  entity.fixedMaxUtilization = orZero(irm.try_fixedMaxUtilization());
+  const irmAddress = event.params.interestRateModel;
+  if (irmAddress.notEqual(Address.zero())) {
+    const irm = InterestRateModelContract.bind(event.params.interestRateModel);
+    entity.floatingCurveA = orZero(irm.try_floatingCurveA());
+    entity.floatingCurveB = orZero(irm.try_floatingCurveB());
+    entity.floatingMaxUtilization = orZero(irm.try_floatingMaxUtilization());
+    entity.minRate = irm.try_parameters().reverted ? BigInt.zero() : irm.parameters().minRate;
+    entity.naturalRate = irm.try_parameters().reverted
+      ? BigInt.zero()
+      : irm.parameters().naturalRate;
+    entity.naturalUtilization = orZero(irm.try_naturalUtilization());
+    entity.sigmoidSpeed = orZero(irm.try_sigmoidSpeed());
+    entity.growthSpeed = orZero(irm.try_growthSpeed());
+    entity.maxRate = orZero(irm.try_maxRate());
+    entity.spreadFactor = orZero(irm.try_spreadFactor());
+    entity.timePreference = orZero(irm.try_timePreference());
+    entity.fixedAllocation = orZero(irm.try_fixedAllocation());
+    entity.maturitySpeed = orZero(irm.try_maturitySpeed());
+    entity.fixedCurveA = orZero(irm.try_fixedCurveA());
+    entity.fixedCurveB = orZero(irm.try_fixedCurveB());
+    entity.fixedMaxUtilization = orZero(irm.try_fixedMaxUtilization());
+  }
 
   entity.save();
 

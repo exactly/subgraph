@@ -21,7 +21,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@exactly/protocol": "exactly/protocol#op-sepolia",
+    "@exactly/protocol": "exactly/protocol#deploy",
     "@graphprotocol/graph-ts": "^0.31.0"
   },
   "devDependencies": {
