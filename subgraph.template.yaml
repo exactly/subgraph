@@ -30,7 +30,7 @@ dataSources:
         - name: Market
           file: node_modules/@exactly/protocol/deployments/{{ network }}/MarketWETH.json
         - name: InterestRateModel
-          file: node_modules/@exactly/protocol/deployments/{{ network }}/InterestRateModelWETH.json
+          file: node_modules/@exactly/protocol/deployments/op-sepolia/InterestRateModelWETH.json
       eventHandlers:
         - event: MarketListed(indexed address,uint8)
           handler: handleMarketListed
@@ -86,11 +86,11 @@ dataSources:
         - MarketState
       abis:
         - name: ERC20
-          file: node_modules/@exactly/protocol/deployments/optimism/WETH.json
+          file: node_modules/@exactly/protocol/deployments/op-sepolia/WETH.json
         - name: Market
-          file: node_modules/@exactly/protocol/deployments/optimism/MarketWETH.json
+          file: node_modules/@exactly/protocol/deployments/op-sepolia/MarketWETH.json
         - name: InterestRateModel
-          file: node_modules/@exactly/protocol/deployments/{{ network }}/InterestRateModelWETH.json
+          file: node_modules/@exactly/protocol/deployments/op-sepolia/InterestRateModelWETH.json
       eventHandlers:
         - event: Deposit(indexed address,indexed address,uint256,uint256)
           handler: handleDeposit
