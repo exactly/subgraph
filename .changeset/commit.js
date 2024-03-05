@@ -1,4 +1,4 @@
 /** @type {import('@changesets/types').CommitFunctions} */
 module.exports = {
-  getVersionMessage: ({ releases: [{ newVersion }] }) => Promise.resolve(`🔖 v${newVersion}`),
+  getVersionMessage: ({ releases }) => Promise.resolve(`🔖 v${releases[0]?.name}`),
 };
