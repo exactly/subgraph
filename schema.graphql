@@ -391,9 +391,9 @@ type MarketState @entity {
   floatingDebt: BigInt
   floatingBackupBorrowed: BigInt
   earningsAccumulator: BigInt
-  floatingCurveA: BigInt
-  floatingCurveB: BigInt
-  floatingMaxUtilization: BigInt
+  floatingCurveA: BigInt!
+  floatingCurveB: BigInt!
+  floatingMaxUtilization: BigInt!
   naturalUtilization: BigInt!
   sigmoidSpeed: BigInt!
   growthSpeed: BigInt!
