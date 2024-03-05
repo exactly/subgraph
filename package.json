@@ -18,7 +18,7 @@
     "prepare:ethereum": "cross-env NETWORK=ethereum mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "prepare:optimism": "cross-env NETWORK=optimism mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
     "prepare:op-sepolia": "cross-env NETWORK=op-sepolia mustache views/protocol.js subgraph.template.yaml > subgraph.yaml",
-    "postinstall": "bun prepare:op-sepolia && bun codegen"
+    "prepare": "bun prepare:op-sepolia && bun codegen"
   },
   "engines": {
     "node": ">=18"
