@@ -8,9 +8,9 @@ const dir = `node_modules/@exactly/protocol/deployments/${network}/`;
 const deployments = readdirSync(dir).filter((file) => extname(file) === '.json');
 
 /** @type {function(string): Deployment} */
-const get = (name) => JSON.parse(readFileSync(join(dir, `${name}.json`)));
+const get = (name) => JSON.parse(readFileSync(join(dir, `${name}.json`)).toString());
 
-/** @type {function(Deployment, string): { name? string, address: string, startBlock: number }} */
+/** @type {function(Deployment, string): { name: string, address: string, startBlock?: number }} */
 const from = ({ address, receipt }, name) => ({ name, address, startBlock: receipt?.blockNumber });
 
 module.exports = {
@@ -26,11 +26,11 @@ module.exports = {
     if (!name.startsWith('Market') || name.includes('_') || name.includes('Router')) return null;
 
     const deployment = get(name);
-    if (deployment.args?.length < 2) return null;
+    if (deployment.args && deployment.args.length < 2) return null;
 
     return from(deployment, name);
   }).filter(Boolean),
   TimelockController: from(get('TimelockController'), 'TimelockController'),
 };
 
-/** @typedef {{ address: string, receipt?: { blockNumber: number }, args?: any[] }} Deployment */
+/** @typedef {{ address: string, receipt?: { blockNumber?: number }, args?: any[] }} Deployment */

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "checkJs": true,
     "allowJs": true
   },
   "include": ["views/**/*.*js", "**/.eslintrc.*js", ".changeset/**/*"]
