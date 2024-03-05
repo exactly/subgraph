@@ -21,22 +21,22 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@exactly/protocol": "exactly/protocol#deploy",
-    "@graphprotocol/graph-ts": "^0.31.0"
+    "@exactly/protocol": "exactly/protocol#c62a0c5",
+    "@graphprotocol/graph-ts": "^0.33.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@changesets/types": "^6.0.0",
-    "@graphprotocol/graph-cli": "^0.67.2",
+    "@graphprotocol/graph-cli": "^0.68.5",
     "@types/mustache": "^4.2.5",
-    "@types/node": "^20.11.16",
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
-    "@typescript-eslint/parser": "^6.20.0",
+    "@types/node": "^20.11.24",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.4.1",
-    "eslint": "^8.56.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "^11.1.0",
