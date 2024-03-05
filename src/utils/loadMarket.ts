@@ -1,6 +1,4 @@
-import {
-  Address, BigInt, Bytes, ethereum,
-} from '@graphprotocol/graph-ts';
+import { Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 
 import { Market } from '../../generated/schema';
 import { ERC20 } from '../../generated/Auditor/ERC20';
