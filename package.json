@@ -24,18 +24,18 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@exactly/protocol": "exactly/protocol#34f9095316657a957215f72e14275f62133af388",
-    "@graphprotocol/graph-ts": "^0.34.0"
+    "@exactly/protocol": "exactly/protocol#0886922c1be4a9075dbc6d3d4de102c30645b114",
+    "@graphprotocol/graph-ts": "^0.35.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@changesets/types": "^6.0.0",
-    "@graphprotocol/graph-cli": "^0.69.0",
-    "@types/eslint": "^8.56.6",
+    "@graphprotocol/graph-cli": "^0.71.0",
+    "@types/eslint": "^8.56.10",
     "@types/mustache": "^4.2.5",
-    "@types/node": "^20.11.30",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
+    "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
@@ -47,9 +47,9 @@
     "eslint-plugin-node": "^11.1.0",
     "mustache": "^4.2.0",
     "path-exists-cli": "^2.0.0",
-    "rescript": "^11.0.1",
+    "rescript": "^11.1.0",
     "ts-node": "^10.9.2",
     "typechain": "^8.3.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.5"
   }
 }
